@@ -226,17 +226,16 @@ public class BPNode {
                 if (canRemoveDirect(key)) {
                     remove(key);
                 } else {
+                    // 先删除key
+                    remove(key);
                     // 如果自身关键字数小于M/2,并且前节点关键字数大于M/2,则从其处借补
                     if (canLeafBorrowPrevious()) {
-                        remove(key);
                         borrowLeafPrevious();
                     } else if (canLeafBorrowNext()) {
-                        remove(key);
                         borrowLeafNext();
                     } else {
                         // 现在需要合并叶子节点
-                        if (canLeafMerge(previous, key)) {
-                            remove(key);
+                        if (canLeafMerge(previous)) {
                             // 与前节点合并
                             addPreNode(previous);
                             previous.recycle();
@@ -262,8 +261,7 @@ public class BPNode {
                                 previous.setNext(null);
                                 previous = null;
                             }
-                        } else if (canLeafMerge(next, key)) {
-                            remove(key);
+                        } else if (canLeafMerge(next)) {
                             addNextNode(next);
                             next.recycle();
                             // 同时删掉后继节点的entry
@@ -283,7 +281,6 @@ public class BPNode {
                             }
                         }
                     }
-
                 }
                 parent.updateRemove(tree);
             }
@@ -348,9 +345,19 @@ public class BPNode {
                     // 从前驱处借
                     // 从前叶子节点末尾节点添加到首位
                     borrowNodePrevious(previous);
+                    if (bpPage.getContentSize() > bpPage.getInitFreeSpace()) {
+                        System.out.println("size caculate error,contentSize=" + bpPage.getContentSize() +
+                                ",freeSpace=" + bpPage.getInitFreeSpace());
+                        throw new RuntimeException("size caculate error!");
+                    }
                 } else if (canNodeBorrowNext(next)) {
                     // 从后继中借
                     borrowNodeNext(next);
+                    if (bpPage.getContentSize() > bpPage.getInitFreeSpace()) {
+                        System.out.println("size caculate error,contentSize=" + bpPage.getContentSize() +
+                                ",freeSpace=" + bpPage.getInitFreeSpace());
+                        throw new RuntimeException("size caculate error!");
+                    }
                 } else {
                     // 现在需要合并子节点
                     if (canMergePrevois(previous)) {
@@ -376,6 +383,12 @@ public class BPNode {
                 // 这边不会出现entries是0的情况,如果entries是0,会在前面的borrow节点给borrow掉,不会到达这里
                 parent.updateRemove(tree);
             }
+        } else if (this.bpPage.getContentSize() > this.bpPage.getInitFreeSpace()) {
+            // now this way show split
+            // 因为在更新的时候,由于key值大小不定,可能导致虽然删除了关键字,但是由于
+            // 更新了新的长的key,导致比删除之前的size还要大,所以就有可能导致分裂
+            // 即changeKeySize - deleteKeySize > 0的某些情况下会导致分裂
+            updateInsert(bpTree);
         }
     }
 
@@ -758,7 +771,6 @@ public class BPNode {
                 bpNode.getEntries().size() >= 2 &&
                 bpNode.bpPage.getContentSize() - borrowKeyLength > bpNode.bpPage.getInitFreeSpace() / 2 &&
                 borrowKeyLength <= this.bpPage.cacluateRemainFreeSpace()) {
-
             return true;
         } else if (this.entries.size() == 0 && bpNode.getEntries().size() >= 2) {
             // 这边特殊处理,是为了不破坏B+树的性质
@@ -771,14 +783,13 @@ public class BPNode {
         }
     }
 
-    public boolean canLeafMerge(BPNode bpNode, Tuple key) {
+    public boolean canLeafMerge(BPNode bpNode) {
         if (bpNode == null) {
             return false;
         }
         // 加上contentSize<space/2这个条件,是为了防止频繁的合并分裂节点
         if (bpNode != null && bpNode.bpPage.getContentSize() < bpNode.bpPage.getInitFreeSpace() / 2 && bpNode.bpPage
-                .getContentSize() <=
-                bpPage.cacluateRemainFreeSpace() + Item.getItemLength(key)
+                .getContentSize() <= bpPage.cacluateRemainFreeSpace()
                 && bpNode.getParent() == parent) {
             return true;
         }

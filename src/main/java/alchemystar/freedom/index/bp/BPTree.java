@@ -7,6 +7,11 @@ import alchemystar.freedom.index.BaseIndex;
 import alchemystar.freedom.meta.Attribute;
 import alchemystar.freedom.meta.Relation;
 import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.value.ValueInt;
+import alchemystar.freedom.store.item.Item;
+import alchemystar.freedom.store.page.Page;
+import alchemystar.freedom.store.page.PageLoader;
+import alchemystar.freedom.store.page.PagePool;
 
 /**
  * BPTree
@@ -36,7 +41,14 @@ public class BPTree extends BaseIndex {
     }
 
     public void loadFromDisk() {
-        getNodeFromPageNo(0);
+        int rootPageNo = getRootPageNoFromMeta();
+        getNodeFromPageNo(rootPageNo);
+    }
+
+    public int getRootPageNoFromMeta() {
+        PageLoader loader = new PageLoader(fStore.readPageFromFile(0));
+        loader.load();
+        return ((ValueInt) loader.getTuples()[0].getValues()[0]).getInt();
     }
 
     public BPNode getNodeFromPageNo(int pageNo) {
@@ -75,8 +87,16 @@ public class BPTree extends BaseIndex {
 
     @Override
     public void flushToDisk() {
+        writeMetaPage();
         // 深度遍历
         root.flushToDisk(fStore);
+    }
+
+    // MetaPage for root page no
+    public void writeMetaPage() {
+        Page page = PagePool.getIntance().getFreePage();
+        page.writeItem(new Item(BpPage.genTupleInt(root.getPageNo())));
+        fStore.writePageToFile(page, 0);
     }
 
     public BPNode getRoot() {

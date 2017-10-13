@@ -7,7 +7,7 @@ import alchemystar.freedom.meta.Tuple;
  *
  * @Author lizhuyang
  */
-public interface Scanner {
+public interface Cursor {
 
     Tuple getNext();
 }

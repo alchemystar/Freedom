@@ -3,12 +3,12 @@ package alchemystar.freedom.access;
 import alchemystar.freedom.meta.Tuple;
 
 /**
- * IndexScanner
+ * IndexCursor
  * 索引扫描
  *
  * @Author lizhuyang
  */
-public class IndexScanner implements Scanner {
+public class IndexCursor implements Cursor {
 
     @Override
     public Tuple getNext() {

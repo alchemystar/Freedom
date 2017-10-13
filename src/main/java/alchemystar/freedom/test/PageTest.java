@@ -1,4 +1,4 @@
-package alchemystar.freedom.store.test;
+package alchemystar.freedom.test;
 
 import org.junit.Test;
 

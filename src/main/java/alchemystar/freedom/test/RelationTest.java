@@ -1,9 +1,9 @@
-package alchemystar.freedom.store.test;
+package alchemystar.freedom.test;
 
 import org.junit.Test;
 
-import alchemystar.freedom.access.Scanner;
-import alchemystar.freedom.access.SeqScanner;
+import alchemystar.freedom.access.Cursor;
+import alchemystar.freedom.access.SeqCursor;
 import alchemystar.freedom.meta.Attribute;
 import alchemystar.freedom.meta.Relation;
 import alchemystar.freedom.meta.Tuple;
@@ -40,7 +40,7 @@ public class RelationTest {
         //        }
         //        relation2.flushToDisk();
         relation2.loadFromDisk();
-        Scanner scanner = new SeqScanner(relation2);
+        Cursor scanner = new SeqCursor(relation2);
         while (true) {
             Tuple tuple = scanner.getNext();
             if (tuple == null) {

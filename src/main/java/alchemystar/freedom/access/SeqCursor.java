@@ -6,12 +6,12 @@ import alchemystar.freedom.store.page.Page;
 import alchemystar.freedom.store.page.PageLoader;
 
 /**
- * SeqScanner
+ * SeqCursor
  * 顺序扫描
  *
  * @Author lizhuyang
  */
-public class SeqScanner implements Scanner {
+public class SeqCursor implements Cursor {
 
     private Relation relation;
     // 当前的page,从第一页开始,第0页为PageOffset页
@@ -21,7 +21,7 @@ public class SeqScanner implements Scanner {
 
     private PageLoader currentPageLoader;
 
-    public SeqScanner(Relation relation) {
+    public SeqCursor(Relation relation) {
         this.relation = relation;
     }
 

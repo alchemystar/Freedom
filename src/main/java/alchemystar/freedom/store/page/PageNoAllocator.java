@@ -17,7 +17,8 @@ public class PageNoAllocator {
     private List<Integer> freePageNoList;
 
     public PageNoAllocator() {
-        count = new AtomicInteger(0);
+        // 0 for meta page
+        count = new AtomicInteger(1);
         freePageNoList = new LinkedList<Integer>();
     }
 

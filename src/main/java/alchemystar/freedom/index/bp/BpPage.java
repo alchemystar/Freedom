@@ -31,56 +31,69 @@ public class BpPage extends Page {
 
     private BPNode bpNode;
 
+    private int leafInitFreeSpace;
+
+    private int nodeInitFreeSpace;
+
     public BpPage(int defaultSize) {
         super(defaultSize);
+        init();
     }
 
     public BpPage(BPNode bpNode) {
         super(SystemConfig.DEFAULT_PAGE_SIZE);
         this.bpNode = bpNode;
+        init();
+    }
+
+    private void init() {
+        leafInitFreeSpace =
+                length - SystemConfig.DEFAULT_SPECIAL_POINT_LENGTH - ItemConst.INT_LEANGTH * 7 - PageHeaderData
+                        .PAGE_HEADER_SIZE;
+        nodeInitFreeSpace =
+                length - SystemConfig.DEFAULT_SPECIAL_POINT_LENGTH - ItemConst.INT_LEANGTH * 6 - PageHeaderData
+                        .PAGE_HEADER_SIZE;
     }
 
     public BPNode readFromPage(BPTree bpTree) {
-        PageLoader loader = null;
-        try {
-            loader = new PageLoader(this);
-            loader.load();
+        PageLoader loader = new PageLoader(this);
+        loader.load();
 
-            boolean isLeaf = getTupleBoolean(loader.getTuples()[0]);
-            boolean isRoot = getTupleBoolean(loader.getTuples()[1]);
+        boolean isLeaf = getTupleBoolean(loader.getTuples()[0]);
+        boolean isRoot = getTupleBoolean(loader.getTuples()[1]);
 
-            bpNode = new BPNode(isLeaf, isRoot, bpTree);
-            // 由于是从磁盘中读取,以磁盘记录的为准
-            int pageNo = getTupleInt(loader.getTuples()[2]);
-            bpNode.setPageNo(pageNo);
-            // 首先在这边放入nodeMap,否则由于一直递归,一直没机会放入,导致循环递归
-            bpTree.nodeMap.put(pageNo, bpNode);
-            int parentPageNo = getTupleInt(loader.getTuples()[3]);
-            bpNode.setParent(bpTree.getNodeFromPageNo(parentPageNo));
-            int entryCount = getTupleInt(loader.getTuples()[4]);
-            for (int i = 0; i < entryCount; i++) {
-                bpNode.getEntries().add(loader.getTuples()[5 + i]);
-            }
-            if (!isLeaf) {
-                int childCount = getTupleInt(loader.getTuples()[5 + entryCount]);
-                int initSize = 6 + entryCount;
-                for (int i = 0; i < childCount; i++) {
-                    int childPageNo = getTupleInt(loader.getTuples()[initSize + i]);
-                    bpNode.getChildren().add(bpTree.getNodeFromPageNo(childPageNo));
-                }
-            } else {
-                int initSize = 5 + entryCount;
-                int previousNo = getTupleInt(loader.getTuples()[initSize]);
-                int nextNo = getTupleInt(loader.getTuples()[initSize + 1]);
-                bpNode.setPrevious(bpTree.getNodeFromPageNo(previousNo));
-                bpNode.setNext(bpTree.getNodeFromPageNo(nextNo));
-            }
+        bpNode = new BPNode(isLeaf, isRoot, bpTree);
+        if (loader.getTuples() == null) {
+            // 处理没有记录的情况
             return bpNode;
-        } catch (Exception e) {
-            System.out.println("bug here");
-            System.out.println(this.getInitFreeSpace());
-            throw new RuntimeException("bug here");
         }
+        // 由于是从磁盘中读取,以磁盘记录的为准
+        int pageNo = getTupleInt(loader.getTuples()[2]);
+        bpNode.setPageNo(pageNo);
+        // 首先在这边放入nodeMap,否则由于一直递归,一直没机会放入,导致循环递归
+        bpTree.nodeMap.put(pageNo, bpNode);
+        int parentPageNo = getTupleInt(loader.getTuples()[3]);
+        bpNode.setParent(bpTree.getNodeFromPageNo(parentPageNo));
+        int entryCount = getTupleInt(loader.getTuples()[4]);
+        for (int i = 0; i < entryCount; i++) {
+            bpNode.getEntries().add(loader.getTuples()[5 + i]);
+        }
+        if (!isLeaf) {
+            int childCount = getTupleInt(loader.getTuples()[5 + entryCount]);
+            int initSize = 6 + entryCount;
+            for (int i = 0; i < childCount; i++) {
+                int childPageNo = getTupleInt(loader.getTuples()[initSize + i]);
+                bpNode.getChildren().add(bpTree.getNodeFromPageNo(childPageNo));
+            }
+        } else {
+            int initSize = 5 + entryCount;
+            int previousNo = getTupleInt(loader.getTuples()[initSize]);
+            int nextNo = getTupleInt(loader.getTuples()[initSize + 1]);
+            bpNode.setPrevious(bpTree.getNodeFromPageNo(previousNo));
+            bpNode.setNext(bpTree.getNodeFromPageNo(nextNo));
+        }
+
+        return bpNode;
     }
 
     public void writeToPage() {
@@ -103,12 +116,7 @@ public class BpPage extends Page {
         writeTuple(genTupleInt(bpNode.getEntries().size()));
         // entries
         for (int i = 0; i < bpNode.getEntries().size(); i++) {
-            if (!writeTuple(bpNode.getEntries().get(i))) {
-                System.out.println("now caculate size error");
-                int size = this.getContentSize();
-                System.out.println("content size =" + size + ",init free sapce =" + this.getInitFreeSpace());
-                writeTuple(bpNode.getEntries().get(i));
-            }
+            writeTuple(bpNode.getEntries().get(i));
         }
         if (!bpNode.isLeaf()) {
             // 非叶子节点
@@ -138,7 +146,7 @@ public class BpPage extends Page {
             size += Item.getItemLength(key);
         }
         if (!bpNode.isLeaf()) {
-            for (int i = 0; i < bpNode.getEntries().size() + 1; i++) {
+            for (int i = 0; i < bpNode.getChildren().size(); i++) {
                 size += ItemConst.INT_LEANGTH;
             }
         }
@@ -151,11 +159,9 @@ public class BpPage extends Page {
 
     public int getInitFreeSpace() {
         if (bpNode.isLeaf()) {
-            return length - SystemConfig.DEFAULT_SPECIAL_POINT_LENGTH - ItemConst.INT_LEANGTH * 7 - PageHeaderData
-                    .PAGE_HEADER_SIZE;
+            return leafInitFreeSpace;
         } else {
-            return length - SystemConfig.DEFAULT_SPECIAL_POINT_LENGTH - ItemConst.INT_LEANGTH * 6 - PageHeaderData
-                    .PAGE_HEADER_SIZE;
+            return nodeInitFreeSpace;
         }
     }
 
@@ -176,20 +182,11 @@ public class BpPage extends Page {
         }
     }
 
-    public Tuple genTupleInt(int i) {
+    public static Tuple genTupleInt(int i) {
         Value[] vs = new Value[1];
         ValueInt valueInt = new ValueInt(i);
         vs[0] = valueInt;
         return new Tuple(vs);
-    }
-
-    public BPNode getBpNode() {
-        return bpNode;
-    }
-
-    public BpPage setBpNode(BPNode bpNode) {
-        this.bpNode = bpNode;
-        return this;
     }
 
     public int getTupleInt(Tuple tuple) {
