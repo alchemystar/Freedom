@@ -6,9 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 import alchemystar.freedom.config.SystemConfig;
-import alchemystar.freedom.index.bp.BPTree;
 import alchemystar.freedom.index.bp.BpPage;
-import alchemystar.freedom.meta.value.ValueInt;
 import alchemystar.freedom.store.page.Page;
 import alchemystar.freedom.store.page.PageLoader;
 import alchemystar.freedom.store.page.PagePool;
@@ -37,10 +35,10 @@ public class FStore {
     }
 
     public Page readPageFromFile(int pageIndex) {
-        return readPageFromFile(pageIndex, false, null);
+        return readPageFromFile(pageIndex, false);
     }
 
-    public Page readPageFromFile(int pageIndex, boolean isIndex, BPTree bpTree) {
+    public Page readPageFromFile(int pageIndex, boolean isIndex) {
         int readPos = pageIndex * SystemConfig.DEFAULT_PAGE_SIZE;
         ByteBuffer buffer = ByteBuffer.allocate(SystemConfig.DEFAULT_PAGE_SIZE);
         try {

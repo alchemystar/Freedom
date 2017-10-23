@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import alchemystar.freedom.index.bp.BPNode;
 import alchemystar.freedom.index.bp.BPTree;
+import alchemystar.freedom.index.bp.GetRes;
 import alchemystar.freedom.meta.Tuple;
 import alchemystar.freedom.meta.value.Value;
 import alchemystar.freedom.meta.value.ValueInt;
@@ -24,13 +25,27 @@ public class BTreeTest {
             Value[] values = new Value[2];
             // Random random = new Random();
             // int toInsert = random.nextInt(insertSize);
+            values[0] = new ValueInt(1);
+            values[1] = new ValueString("alchemystar");
+            Tuple tuple = new Tuple(values);
+            if (i == 9) {
+                bpTree.insert(tuple, false);
+            } else {
+                bpTree.insert(tuple, false);
+            }
+        }
+
+        for (int i = 2; i <= 10; i++) {
+            Value[] values = new Value[2];
+            // Random random = new Random();
+            // int toInsert = random.nextInt(insertSize);
             values[0] = new ValueInt(i);
             values[1] = new ValueString("alchemystar");
             Tuple tuple = new Tuple(values);
             if (i == 9) {
-                bpTree.insert(tuple);
+                bpTree.insert(tuple, false);
             } else {
-                bpTree.insert(tuple);
+                bpTree.insert(tuple, false);
             }
         }
 
@@ -58,64 +73,58 @@ public class BTreeTest {
         bpTree.remove(t9);
         bpTree.remove(t10);
         bpTree.remove(t11);*/
-        for (int i = 0; i < insertSize; i++) {
-            Random random = new Random();
-            int toInsert = random.nextInt(insertSize);
-            Tuple tuple = genTuple(toInsert);
-            bpTree.remove(tuple);
-        }
-      /*  BPNode node = bpTree.getHead();
+        BPNode node = bpTree.getHead();
         // int sum = 0;
         while (node != null) {
             for (int i = 0; i < node.getEntries().size(); i++) {
-                // System.out.println(node.getEntries().get(i));
-                Tuple tuple = bpTree.get(node.getEntries().get(i));
+                // System.out.println(node.getEntries().getFirst(i));
+                Tuple tuple = bpTree.getFirst(node.getEntries().get(i)).getTuple();
                 if (tuple == null) {
                     System.out.println("it is null");
                 }
             }
             node = node.getNext();
-        }*/
+        }
 
-        printBtree(bpTree.getRoot());
+       // printBtree(bpTree.getRoot());
     }
 
     @Test
     public void test2() {
         BPTree bpTree = new BPTree(null, "bpindex", null);
-        bpTree.insert(genTuple(7699));
-        bpTree.insert(genTuple(3825));
-        bpTree.insert(genTuple(9358));
-        bpTree.insert(genTuple(4519));
-        bpTree.insert(genTuple(1362));
-        bpTree.insert(genTuple(2288));
-        bpTree.insert(genTuple(5599));
-        bpTree.insert(genTuple(1562));
-        bpTree.insert(genTuple(898));
-        bpTree.insert(genTuple(9786));
-        bpTree.insert(genTuple(9691));
-        bpTree.insert(genTuple(4139));
-        bpTree.insert(genTuple(9674));
-        bpTree.insert(genTuple(3620));
-        bpTree.insert(genTuple(5514));
-        bpTree.insert(genTuple(6645));
-        bpTree.insert(genTuple(6949));
-        bpTree.insert(genTuple(8651));
-        bpTree.insert(genTuple(9645));
-        bpTree.insert(genTuple(5175));
-        bpTree.insert(genTuple(6162));
-        bpTree.insert(genTuple(6521));
-        bpTree.insert(genTuple(3214));
-        bpTree.insert(genTuple(7351));
-        bpTree.insert(genTuple(7095));
-        bpTree.insert(genTuple(3719));
-        bpTree.insert(genTuple(1883));
-        bpTree.insert(genTuple(1494));
-        bpTree.insert(genTuple(9660));
-        bpTree.insert(genTuple(1438));
-        bpTree.insert(genTuple(6874));
-        bpTree.insert(genTuple(2854));
-        bpTree.insert(genTuple(5718));
+        bpTree.insert(genTuple(7699), true);
+        bpTree.insert(genTuple(3825), true);
+        bpTree.insert(genTuple(9358), true);
+        bpTree.insert(genTuple(4519), true);
+        bpTree.insert(genTuple(1362), true);
+        bpTree.insert(genTuple(2288), true);
+        bpTree.insert(genTuple(5599), true);
+        bpTree.insert(genTuple(1562), true);
+        bpTree.insert(genTuple(898), true);
+        bpTree.insert(genTuple(9786), true);
+        bpTree.insert(genTuple(9691), true);
+        bpTree.insert(genTuple(4139), true);
+        bpTree.insert(genTuple(9674), true);
+        bpTree.insert(genTuple(3620), true);
+        bpTree.insert(genTuple(5514), true);
+        bpTree.insert(genTuple(6645), true);
+        bpTree.insert(genTuple(6949), true);
+        bpTree.insert(genTuple(8651), true);
+        bpTree.insert(genTuple(9645), true);
+        bpTree.insert(genTuple(5175), true);
+        bpTree.insert(genTuple(6162), true);
+        bpTree.insert(genTuple(6521), true);
+        bpTree.insert(genTuple(3214), true);
+        bpTree.insert(genTuple(7351), true);
+        bpTree.insert(genTuple(7095), true);
+        bpTree.insert(genTuple(3719), true);
+        bpTree.insert(genTuple(1883), true);
+        bpTree.insert(genTuple(1494), true);
+        bpTree.insert(genTuple(9660), true);
+        bpTree.insert(genTuple(1438), true);
+        bpTree.insert(genTuple(6874), true);
+        bpTree.insert(genTuple(2854), true);
+        bpTree.insert(genTuple(5718), true);
         System.out.println("hahaha");
         BPNode BPNode = bpTree.getHead();
 
@@ -124,9 +133,12 @@ public class BTreeTest {
         }
         while (BPNode != null) {
             for (int i = BPNode.getEntries().size() - 1; i >= 0; i--) {
-                // System.out.println(BPNode.getEntries().get(i));
-                Tuple tuple = bpTree.get(BPNode.getEntries().get(i));
-                bpTree.remove(tuple);
+                // System.out.println(BPNode.getEntries().getFirst(i));
+                GetRes res = bpTree.getFirst(BPNode.getEntries().get(i));
+                Tuple tuple = res.getTuple();
+                if (res != null) {
+                    bpTree.remove(tuple);
+                }
                 if (tuple == null) {
                     System.out.println("it is null");
                 } else {
@@ -146,7 +158,7 @@ public class BTreeTest {
             Random random = new Random();
             int toInsert = random.nextInt(insertSize);
             Tuple tuple = genTuple(toInsert);
-            bpTree.insert(tuple);
+            bpTree.insert(tuple, true);
         }
         printBtree(bpTree.getRoot());
         for (int i = 1; i <= insertSize * 5; i++) {
@@ -156,7 +168,7 @@ public class BTreeTest {
             if (insertSize % 2 == 0) {
                 bpTree.remove(tuple);
             } else {
-                bpTree.insert(tuple);
+                bpTree.insert(tuple, true);
             }
         }
         BPNode bpNode = bpTree.getHead();
@@ -166,15 +178,16 @@ public class BTreeTest {
         }
         while (bpNode != null) {
             for (int i = bpNode.getEntries().size() - 1; i >= 0; i--) {
-                Tuple tuple = bpTree.get(bpNode.getEntries().get(i));
-                bpTree.remove(tuple);
+                GetRes res = bpTree.getFirst(bpNode.getEntries().get(i));
+                if (res != null) {
+                    bpTree.remove(res.getTuple());
+                }
             }
             bpNode = bpNode.getPrevious();
         }
         printBtree(bpTree.getRoot());
 
     }
-
 
     public static void printBtree(BPNode bpNode) {
         if (bpNode == null) {
@@ -199,14 +212,14 @@ public class BTreeTest {
                 }
                 if (i < bpNode.getEntries().size()) {
                     if (bpNode.getEntries().get(i)
-                            .compare(bpNode.getChildren().get(i).getEntries().get(bpNode.getChildren
+                            .compareIndex(bpNode.getChildren().get(i).getEntries().get(bpNode.getChildren
                                     ().get(i).getEntries().size() - 1)) <= 0) {
                         throw new RuntimeException("hahaha error");
                     }
                 }
                 if (i == bpNode.getEntries().size()) {
                     if (bpNode.getEntries().get(i - 1)
-                            .compare(bpNode.getChildren().get(i).getEntries().get(bpNode.getChildren
+                            .compareIndex(bpNode.getChildren().get(i).getEntries().get(bpNode.getChildren
                                     ().get(i).getEntries().size() - 1)) > 0) {
                         throw new RuntimeException("hahaha error");
                     }

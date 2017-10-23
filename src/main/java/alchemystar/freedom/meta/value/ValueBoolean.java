@@ -69,7 +69,20 @@ public class ValueBoolean extends Value {
 
     @Override
     public int compare(Value value) {
-        // todo
-        return 0;
+        boolean toCompare = ((ValueBoolean) value).getBoolean();
+        if (b) {
+            if (toCompare) {
+                return 0;
+            } else {
+                return 1;
+            }
+        } else {
+            if (toCompare) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
+
     }
 }

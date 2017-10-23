@@ -4,6 +4,7 @@ import java.util.List;
 
 import alchemystar.freedom.meta.Tuple;
 import alchemystar.freedom.store.item.Item;
+import alchemystar.freedom.store.item.ItemPointer;
 import alchemystar.freedom.util.BufferWrapper;
 
 /**
@@ -63,9 +64,17 @@ public class Page {
         }
     }
 
+    public void delete(int pageCount) {
+        // 其实质是将对应的itemLength设置为-1
+        int position = pageHeaderData.getLength() + ItemPointer.getPtrLength() * pageCount + 4;
+        writeIntPos(-1, position);
+        // 由于page本身存储的item count不变,所以不需要变动item count
+        dirty = true;
+    }
+
     public void writeItems(List<Item> items) {
         for (Item item : items) {
-            if (this.writeItem(item)) {
+            if (writeItem(item)) {
                 continue;
             } else {
                 throw new RuntimeException("Meta Info Two Long");

@@ -18,4 +18,6 @@ public interface SystemConfig {
     String FREEDOM_REL_PATH = "/Users/alchemystar/var/freedom/t_freedom";
 
     String FREEDOM_REL_META_PATH = "/Users/alchemystar/var/freedom/t_freedom_meta";
+
+    String FREEDOM_LOG_FILE_NAME = "/Users/alchemystar/var/freedom/t_freedom_log";
 }

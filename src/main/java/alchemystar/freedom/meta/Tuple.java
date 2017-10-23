@@ -77,17 +77,44 @@ public class Tuple {
 
     // 和另一个tuple的比较
     // 注意,另一个tuple的可能是个索引,所以两者column的length可能不等
+    // 同时,由于最终索引会加两个值表示pageNo和offset,所以,应该比传进来的tuple长度大
     // todo 字典序compare
+    public int compareIndex(Tuple tuple) {
+        //        int min = values.length < tuple.getValues().length ? values.length : tuple.getValues().length;
+        //        for (int i = 0; i < min; i++) {
+        //            int comp = values[i].compare(tuple.getValues()[i]);
+        //            if (comp == 0) {
+        //                continue;
+        //            }
+        //            return comp;
+        //        }
+        //        return 0;
+        return compare(tuple);
+    }
+
+    // 用于索引的tuple比较
     public int compare(Tuple tuple) {
         int min = values.length < tuple.getValues().length ? values.length : tuple.getValues().length;
+        int comp = 0;
         for (int i = 0; i < min; i++) {
-            int comp = values[i].compare(tuple.getValues()[i]);
+            comp = values[i].compare(tuple.getValues()[i]);
             if (comp == 0) {
                 continue;
             }
-            return comp;
         }
-        return 0;
+        // 到这,表明前面的都相等
+        if (comp == 0) {
+            if (values.length == tuple.getValues().length) {
+                return 0;
+            }
+            // 长度小的在前面
+            if (values.length < tuple.getValues().length) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
+        return comp;
     }
 
     public int getLength() {

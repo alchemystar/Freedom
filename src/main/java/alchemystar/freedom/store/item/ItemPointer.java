@@ -29,7 +29,7 @@ public class ItemPointer {
         page.modifyLowerOffer(lowerOffset);
     }
 
-    public int getPtrLength() {
+    public static int getPtrLength() {
         return 8;
     }
 

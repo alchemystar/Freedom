@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import alchemystar.freedom.config.SystemConfig;
+import alchemystar.freedom.index.BaseIndex;
 import alchemystar.freedom.meta.value.Value;
 import alchemystar.freedom.meta.value.ValueInt;
 import alchemystar.freedom.store.fs.FStore;
@@ -41,12 +42,51 @@ public class Relation {
     // 页号/PageLoad映射
     private Map<Integer, Page> pageMap;
 
+    // 索引集合,包含了primaryIndex
+    private List<BaseIndex> indexes = new ArrayList<BaseIndex>();
+    // 主键索引,聚簇索引
+    // 主键索引,最后两个必须是pageNo,countNo
+    private BaseIndex primaryIndex;
+
     public static final int META_PAGE_INDEX = 0;
 
     public static final int PAGE_OFFSET_INDEX = 0;
 
     public Relation() {
 
+    }
+
+    public void insert(Tuple tuple) {
+        insert(new Item(tuple));
+    }
+
+    public void delete(Tuple tuple) {
+        // todo 这样删除会留下空洞,重复利用数据check
+        // 能删除的tuple必须是从主键索引查出来的tuple
+        // 如果从其它索引查tuple,则会再查一次主键tuple,这样的话,能知道其pageNo以及pageCount
+        Page page = relStore.readPageFromFile(getPageNo(tuple));
+        page.delete(getPageCount(tuple));
+    }
+
+    // 主键tuple的最后两个,一个是pageCount,一个是pageNo
+    private int getPageNo(Tuple tuple) {
+        int length = tuple.getLength();
+        return ((ValueInt) (tuple.getValues()[length - 2])).getInt();
+    }
+
+    private int getPageCount(Tuple tuple) {
+        int length = tuple.getLength();
+        return ((ValueInt) (tuple.getValues()[length - 1])).getInt();
+    }
+
+    // 这边用的是新的update过后的tuple
+    // 删除的时候根据pageNo和pageCount删除旧tuple
+    // 再插入新的tuple
+    public void update(Tuple tupleBefore, Tuple tupleAfter) {
+        // 首先将原先的tuple给删除,其中之用到了tuple中的pageNo和pageCount字段
+        delete(tupleBefore);
+        // 然后将新的tuple给写入
+        insert(tupleAfter);
     }
 
     public void insert(Item item) {
@@ -227,6 +267,15 @@ public class Relation {
 
     public Relation setPageCount(int pageCount) {
         this.pageCount = pageCount;
+        return this;
+    }
+
+    public List<BaseIndex> getIndexes() {
+        return indexes;
+    }
+
+    public Relation setIndexes(List<BaseIndex> indexes) {
+        this.indexes = indexes;
         return this;
     }
 }

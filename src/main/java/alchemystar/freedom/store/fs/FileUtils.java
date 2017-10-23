@@ -54,4 +54,20 @@ public class FileUtils {
         } while (src.remaining() > 0);
     }
 
+    public static void readFully(FileChannel channel, ByteBuffer dst) throws IOException {
+        do {
+            int r = channel.read(dst);
+            if (r < 0) {
+                throw new EOFException();
+            }
+        } while (dst.remaining() > 0);
+    }
+
+    public static void writeFully(FileChannel channel, ByteBuffer src) throws IOException {
+        do {
+            // 追加数据
+            channel.position(channel.size());
+            channel.write(src);
+        } while (src.remaining() > 0);
+    }
 }

@@ -1,5 +1,8 @@
 package alchemystar.freedom.store.page;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import alchemystar.freedom.meta.Tuple;
 import alchemystar.freedom.store.item.ItemPointer;
 
@@ -24,18 +27,24 @@ public class PageLoader {
         tupleCount = pageHeaderData.getTupleCount();
         int ptrStartOff = pageHeaderData.getLength();
         // 首先建立存储tuple的数组
-        tuples = new Tuple[tupleCount];
+        List<Tuple> temp = new ArrayList<Tuple>();
         // 循环读取
         for (int i = 0; i < tupleCount; i++) {
             // 重新从page读取tuple
             ItemPointer ptr = new ItemPointer(page.readInt(), page.readInt());
+            if (ptr.getTupleLength() == -1) {
+                continue;
+            }
             byte[] bb = page.readBytes(ptr.getOffset(), ptr.getTupleLength());
             Tuple tuple = new Tuple();
             tuple.read(bb);
-            tuples[i] = tuple;
+            temp.add(tuple);
             // 进入到下一个元组位置
             ptrStartOff = ptrStartOff + ptr.getTupleLength();
         }
+        // 由于可能由于被删除,置为-1,所以以temp为准
+        tuples = temp.toArray(new Tuple[temp.size()]);
+        tupleCount = temp.size();
     }
 
     public Tuple[] getTuples() {
