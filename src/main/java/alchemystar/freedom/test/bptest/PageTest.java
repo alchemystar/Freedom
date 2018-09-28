@@ -1,9 +1,9 @@
-package alchemystar.freedom.test;
+package alchemystar.freedom.test.bptest;
 
 import org.junit.Test;
 
 import alchemystar.freedom.config.SystemConfig;
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.value.Value;
 import alchemystar.freedom.meta.value.ValueBoolean;
 import alchemystar.freedom.meta.value.ValueInt;
@@ -30,8 +30,8 @@ public class PageTest {
         values[2] = new ValueBoolean(true);
         values[3] = new ValueInt(5);
         values[4] = new ValueLong(6L);
-        Tuple tuple = new Tuple(values);
-        Item item = new Item(tuple);
+        IndexEntry indexEntry = new IndexEntry(values);
+        Item item = new Item(indexEntry);
         System.out.println(item.getLength());
         PagePool pagePool = PagePool.getIntance();
         Page page = pagePool.getFreePage();
@@ -49,9 +49,9 @@ public class PageTest {
         fStore.writePageToFile(page, 10);
 
         PageLoader loader = fStore.readPageLoaderFromFile(0);
-        Tuple[] tuples = loader.getTuples();
-        for (int i = 0; i < tuples.length; i++) {
-            System.out.println(tuples[i]);
+        IndexEntry[] indexEntries = loader.getIndexEntries();
+        for (int i = 0; i < indexEntries.length; i++) {
+            System.out.println(indexEntries[i]);
         }
     }
 }

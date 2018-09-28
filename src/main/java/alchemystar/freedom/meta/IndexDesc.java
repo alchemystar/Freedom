@@ -14,13 +14,13 @@ import alchemystar.freedom.util.ValueConvertUtil;
  *
  * @Author lizhuyang
  */
-public class TupleDesc {
+public class IndexDesc {
     // 元组的属性数组
     private Attribute[] attrs;
 
     private Map<String, Attribute> attrsMap;
 
-    public TupleDesc(Attribute[] attrs) {
+    public IndexDesc(Attribute[] attrs) {
         this.attrs = attrs;
         attrsMap = new HashMap<String, Attribute>();
         for (Attribute attr : attrs) {
@@ -33,8 +33,8 @@ public class TupleDesc {
         List<Item> list = new LinkedList<Item>();
         for (Attribute attribute : attrs) {
             Value[] values = ValueConvertUtil.convertAttr(attribute);
-            Tuple tuple = new Tuple(values);
-            Item item = new Item(tuple);
+            IndexEntry indexEntry = new IndexEntry(values);
+            Item item = new Item(indexEntry);
             list.add(item);
         }
         return list;

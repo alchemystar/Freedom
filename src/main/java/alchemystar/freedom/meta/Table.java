@@ -17,14 +17,14 @@ import alchemystar.freedom.store.page.PagePool;
 import alchemystar.freedom.util.ValueConvertUtil;
 
 /**
- * Relation
+ * Table
  * 即Table
  *
  * @Author lizhuyang
  */
-public class Relation {
+public class Table {
     // relation包含的元组描述
-    private TupleDesc tupleDesc;
+    private IndexDesc indexDesc;
     // Relation对应的FilePath
     private String relPath;
     // Relation对应的metaPath
@@ -42,51 +42,53 @@ public class Relation {
     // 页号/PageLoad映射
     private Map<Integer, Page> pageMap;
 
-    // 索引集合,包含了primaryIndex
-    private List<BaseIndex> indexes = new ArrayList<BaseIndex>();
+    // second索引 二级索引
+    private List<BaseIndex> secondIndexes = new ArrayList<BaseIndex>();
     // 主键索引,聚簇索引
-    // 主键索引,最后两个必须是pageNo,countNo
-    private BaseIndex primaryIndex;
+    private BaseIndex clusterIndex;
 
     public static final int META_PAGE_INDEX = 0;
 
     public static final int PAGE_OFFSET_INDEX = 0;
 
-    public Relation() {
+    public Table() {
 
     }
 
-    public void insert(Tuple tuple) {
-        insert(new Item(tuple));
+
+    // todo ERROR 实现有问题,应该用clusterIndex来存储数据
+
+    public void insert(IndexEntry indexEntry) {
+        //
     }
 
-    public void delete(Tuple tuple) {
+    public void delete(IndexEntry indexEntry) {
         // todo 这样删除会留下空洞,重复利用数据check
         // 能删除的tuple必须是从主键索引查出来的tuple
         // 如果从其它索引查tuple,则会再查一次主键tuple,这样的话,能知道其pageNo以及pageCount
-        Page page = relStore.readPageFromFile(getPageNo(tuple));
-        page.delete(getPageCount(tuple));
+        Page page = relStore.readPageFromFile(getPageNo(indexEntry));
+        page.delete(getPageCount(indexEntry));
     }
 
     // 主键tuple的最后两个,一个是pageCount,一个是pageNo
-    private int getPageNo(Tuple tuple) {
-        int length = tuple.getLength();
-        return ((ValueInt) (tuple.getValues()[length - 2])).getInt();
+    private int getPageNo(IndexEntry indexEntry) {
+        int length = indexEntry.getLength();
+        return ((ValueInt) (indexEntry.getValues()[length - 2])).getInt();
     }
 
-    private int getPageCount(Tuple tuple) {
-        int length = tuple.getLength();
-        return ((ValueInt) (tuple.getValues()[length - 1])).getInt();
+    private int getPageCount(IndexEntry indexEntry) {
+        int length = indexEntry.getLength();
+        return ((ValueInt) (indexEntry.getValues()[length - 1])).getInt();
     }
 
     // 这边用的是新的update过后的tuple
     // 删除的时候根据pageNo和pageCount删除旧tuple
     // 再插入新的tuple
-    public void update(Tuple tupleBefore, Tuple tupleAfter) {
+    public void update(IndexEntry indexEntryBefore, IndexEntry indexEntryAfter) {
         // 首先将原先的tuple给删除,其中之用到了tuple中的pageNo和pageCount字段
-        delete(tupleBefore);
+        delete(indexEntryBefore);
         // 然后将新的tuple给写入
-        insert(tupleAfter);
+        insert(indexEntryAfter);
     }
 
     public void insert(Item item) {
@@ -165,11 +167,11 @@ public class Relation {
         // 元信息只有一页
         PageLoader loader = metaStore.readPageLoaderFromFile(0);
         List<Attribute> list = new ArrayList<Attribute>();
-        for (Tuple tuple : loader.getTuples()) {
-            Attribute attr = ValueConvertUtil.convertValue(tuple.getValues());
+        for (IndexEntry indexEntry : loader.getIndexEntries()) {
+            Attribute attr = ValueConvertUtil.convertValue(indexEntry.getValues());
             list.add(attr);
         }
-        tupleDesc = new TupleDesc(list.toArray(new Attribute[list.size()]));
+        indexDesc = new IndexDesc(list.toArray(new Attribute[list.size()]));
     }
 
     // 读取页page offset映射信息
@@ -177,9 +179,9 @@ public class Relation {
         // page offset信息仅仅在第一页
         PageLoader loader = relStore.readPageLoaderFromFile(0);
         pageOffsetMap.clear();
-        pageCount = loader.getTuples().length;
-        for (Tuple tuple : loader.getTuples()) {
-            Value[] values = tuple.getValues();
+        pageCount = loader.getIndexEntries().length;
+        for (IndexEntry indexEntry : loader.getIndexEntries()) {
+            Value[] values = indexEntry.getValues();
             int pageNo = ((ValueInt) values[0]).getInt();
             int offset = ((ValueInt) values[1]).getInt();
             pageOffsetMap.put(pageNo, offset);
@@ -193,8 +195,8 @@ public class Relation {
             Value[] values = new Value[2];
             values[0] = new ValueInt(pageNo);
             values[1] = new ValueInt(pageOffsetMap.get(pageNo));
-            Tuple tuple = new Tuple(values);
-            list.add(new Item(tuple));
+            IndexEntry indexEntry = new IndexEntry(values);
+            list.add(new Item(indexEntry));
         }
         Page page = PagePool.getIntance().getFreePage();
         page.writeItems(list);
@@ -209,7 +211,7 @@ public class Relation {
 
     public Page convertToMetaPage() {
         // 首先获取需要写入的原信息
-        List<Item> list = tupleDesc.getItems();
+        List<Item> list = indexDesc.getItems();
         Page page = PagePool.getIntance().getFreePage();
         page.writeItems(list);
         return page;
@@ -219,7 +221,7 @@ public class Relation {
         return relPath;
     }
 
-    public Relation setRelPath(String relPath) {
+    public Table setRelPath(String relPath) {
         this.relPath = relPath;
         return this;
     }
@@ -228,17 +230,17 @@ public class Relation {
         return metaPath;
     }
 
-    public Relation setMetaPath(String metaPath) {
+    public Table setMetaPath(String metaPath) {
         this.metaPath = metaPath;
         return this;
     }
 
-    public TupleDesc getTupleDesc() {
-        return tupleDesc;
+    public IndexDesc getIndexDesc() {
+        return indexDesc;
     }
 
-    public Relation setTupleDesc(TupleDesc tupleDesc) {
-        this.tupleDesc = tupleDesc;
+    public Table setIndexDesc(IndexDesc indexDesc) {
+        this.indexDesc = indexDesc;
         return this;
     }
 
@@ -256,7 +258,7 @@ public class Relation {
         return pageMap;
     }
 
-    public Relation setPageMap(Map<Integer, Page> pageMap) {
+    public Table setPageMap(Map<Integer, Page> pageMap) {
         this.pageMap = pageMap;
         return this;
     }
@@ -265,17 +267,17 @@ public class Relation {
         return pageCount;
     }
 
-    public Relation setPageCount(int pageCount) {
+    public Table setPageCount(int pageCount) {
         this.pageCount = pageCount;
         return this;
     }
 
-    public List<BaseIndex> getIndexes() {
-        return indexes;
+    public List<BaseIndex> getSecondIndexes() {
+        return secondIndexes;
     }
 
-    public Relation setIndexes(List<BaseIndex> indexes) {
-        this.indexes = indexes;
+    public Table setSecondIndexes(List<BaseIndex> secondIndexes) {
+        this.secondIndexes = secondIndexes;
         return this;
     }
 }

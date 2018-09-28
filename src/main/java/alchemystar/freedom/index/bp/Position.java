@@ -7,13 +7,15 @@ import alchemystar.freedom.meta.Tuple;
  *
  * @Author lizhuyang
  */
-public class GetRes {
+public class Position {
 
     private BPNode bpNode;
 
+    private int position;
+
     private Tuple tuple;
 
-    public GetRes(BPNode bpNode, Tuple tuple) {
+    public Position(BPNode bpNode, Tuple tuple) {
         this.bpNode = bpNode;
         this.tuple = tuple;
     }
@@ -22,7 +24,7 @@ public class GetRes {
         return bpNode;
     }
 
-    public GetRes setBpNode(BPNode bpNode) {
+    public Position setBpNode(BPNode bpNode) {
         this.bpNode = bpNode;
         return this;
     }
@@ -31,8 +33,16 @@ public class GetRes {
         return tuple;
     }
 
-    public GetRes setTuple(Tuple tuple) {
+    public Position setTuple(Tuple tuple) {
         this.tuple = tuple;
         return this;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

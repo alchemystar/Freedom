@@ -1,15 +1,19 @@
-package alchemystar.freedom.test;
+package alchemystar.freedom.test.bptest;
 
 import java.util.Random;
 
 import org.junit.Test;
 
+import alchemystar.freedom.access.Cursor;
 import alchemystar.freedom.index.bp.BPNode;
 import alchemystar.freedom.index.bp.BPTree;
-import alchemystar.freedom.index.bp.GetRes;
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.index.bp.Position;
+import alchemystar.freedom.meta.Attribute;
+import alchemystar.freedom.meta.IndexEntry;
+import alchemystar.freedom.meta.Table;
 import alchemystar.freedom.meta.value.Value;
 import alchemystar.freedom.meta.value.ValueInt;
+import alchemystar.freedom.meta.value.ValueLong;
 import alchemystar.freedom.meta.value.ValueString;
 
 /**
@@ -18,75 +22,84 @@ import alchemystar.freedom.meta.value.ValueString;
 public class BTreeTest {
 
     @Test
-    public void test() {
-        BPTree bpTree = new BPTree(null, "bpindex", null);
-        int insertSize = 10000;
+    public void clusterIndexTest() {
+        BPTree bpTree = new BPTree(getTable(), "bpindex", getClusterAttributes());
+        bpTree.setPrimaryKey(true);
+        int insertSize = 100345;
         for (int i = 1; i <= insertSize; i++) {
             Value[] values = new Value[2];
-            // Random random = new Random();
-            // int toInsert = random.nextInt(insertSize);
-            values[0] = new ValueInt(1);
-            values[1] = new ValueString("alchemystar");
-            Tuple tuple = new Tuple(values);
-            if (i == 9) {
-                bpTree.insert(tuple, false);
-            } else {
-                bpTree.insert(tuple, false);
-            }
-        }
+            values[0] = new ValueLong(i);
+            values[1] = new ValueString("alchemystar" + String.valueOf(i));
+            // 主键索引,所以走table attribute
+            IndexEntry indexEntry = new IndexEntry(values);
+            indexEntry.setIndexDesc(bpTree.getIndexDesc());
+            bpTree.insert(indexEntry, false);
 
-        for (int i = 2; i <= 10; i++) {
+        }
+        IndexEntry searchEntry = getClusterLowSearchEntry();
+        Cursor cursor = bpTree.searchEqual(searchEntry);
+        IndexEntry indexEntry;
+        while ((indexEntry = cursor.next()) != null) {
+            System.out.println(indexEntry);
+        }
+        cursor = bpTree.searchRange(getClusterLowSearchEntry(), getClusterUpSearchEntry());
+        while ((indexEntry = cursor.next()) != null) {
+            System.out.println(indexEntry);
+        }
+        //  printBtree(bpTree.getRoot());
+    }
+
+    @Test
+    public void secondIndexTest() {
+        BPTree bpTree = new BPTree(getTable(), "secondIndex", getSecondAttributes());
+        bpTree.setPrimaryKey(false);
+        int insertSize = 5000;
+        for (int i = 1; i <= insertSize; i++) {
             Value[] values = new Value[2];
-            // Random random = new Random();
-            // int toInsert = random.nextInt(insertSize);
-            values[0] = new ValueInt(i);
-            values[1] = new ValueString("alchemystar");
-            Tuple tuple = new Tuple(values);
-            if (i == 9) {
-                bpTree.insert(tuple, false);
-            } else {
-                bpTree.insert(tuple, false);
+            String addPrefix = String.valueOf(i % 1000);
+            if (addPrefix.length() == 1) {
+                addPrefix = addPrefix + "00";
+            } else if (addPrefix.length() == 2) {
+                addPrefix = addPrefix + "0";
             }
-        }
+            values[0] = new ValueString("alchemystar" + addPrefix);
+            values[1] = new ValueLong(i);
+            // 主键索引,所以走table attribute
+            IndexEntry indexEntry = new IndexEntry(values);
+            indexEntry.setIndexDesc(bpTree.getIndexDesc());
+            bpTree.insert(indexEntry, false);
 
-       /* Tuple t1 = genTuple(3);
-        Tuple t2 = genTuple(5);
-        Tuple t3 = genTuple(6);
-        Tuple t4 = genTuple(8);
-        Tuple t5 = genTuple(9);
-        Tuple t6 = genTuple(1);
-        Tuple t7 = genTuple(10);
-        Tuple t8 = genTuple(4);
-        Tuple t9 = genTuple(7);
-        Tuple t10 = genTuple(2);
-        Tuple t11 = genTuple(11);
-        //   Tuple tupleFive = genTuple(5);
-        bpTree.remove(t1);
-        bpTree.remove(t2);
-        bpTree.remove(t3);
-        bpTree.remove(t4);
-        bpTree.remove(t5);
-        //   bpTree.remove(tupleFive);
-        bpTree.remove(t6);
-        bpTree.remove(t7);
-        bpTree.remove(t8);
-        bpTree.remove(t9);
-        bpTree.remove(t10);
-        bpTree.remove(t11);*/
-        BPNode node = bpTree.getHead();
-        // int sum = 0;
-        while (node != null) {
-            for (int i = 0; i < node.getEntries().size(); i++) {
-                // System.out.println(node.getEntries().getFirst(i));
-                Tuple tuple = bpTree.getFirst(node.getEntries().get(i)).getTuple();
-                if (tuple == null) {
-                    System.out.println("it is null");
-                }
-            }
-            node = node.getNext();
         }
+        IndexEntry searchEntry = getSecondLowSearchEntry();
+        Cursor cursor = bpTree.searchEqual(searchEntry);
+        IndexEntry indexEntry;
+        int count = 0;
+        while ((indexEntry = cursor.next()) != null) {
+            count++;
+            System.out.println(indexEntry);
+        }
+        System.out.println(count);
+        cursor = bpTree.searchRange(getSecondLowSearchEntry(), getSecondUpSearchEntry());
+        while ((indexEntry = cursor.next()) != null) {
+            System.out.println(indexEntry);
+        }
+        // printBtree(bpTree.getRoot());
+    }
 
-       // printBtree(bpTree.getRoot());
+    public IndexEntry getClusterLowSearchEntry() {
+        return new IndexEntry(new Value[] {new ValueLong(1345)});
+    }
+
+    public IndexEntry getClusterUpSearchEntry() {
+        return new IndexEntry(new Value[] {new ValueLong(10000)});
+    }
+
+    public IndexEntry getSecondLowSearchEntry() {
+        return new IndexEntry(new Value[] {new ValueString("alchemystar200")});
+    }
+
+    public IndexEntry getSecondUpSearchEntry() {
+        return new IndexEntry(new Value[] {new ValueString("alchemystar510")});
     }
 
     @Test
@@ -134,20 +147,42 @@ public class BTreeTest {
         while (BPNode != null) {
             for (int i = BPNode.getEntries().size() - 1; i >= 0; i--) {
                 // System.out.println(BPNode.getEntries().getFirst(i));
-                GetRes res = bpTree.getFirst(BPNode.getEntries().get(i));
-                Tuple tuple = res.getTuple();
-                if (res != null) {
-                    bpTree.remove(tuple);
-                }
-                if (tuple == null) {
-                    System.out.println("it is null");
-                } else {
-                    System.out.println(tuple.getValues()[0]);
-                }
+                Position res = bpTree.getFirst(BPNode.getEntries().get(i), false);
+                //  IndexEntry indexEntry = res.getIndexEntry();
+                //                if (res != null) {
+                //                    bpTree.remove(indexEntry);
+                //                }
+                //                if (indexEntry == null) {
+                //                    System.out.println("it is null");
+                //                } else {
+                //                    System.out.println(indexEntry.getValues()[0]);
+                //                }
             }
             BPNode = BPNode.getPrevious();
         }
         printBtree(bpTree.getRoot());
+    }
+
+    public Table getTable() {
+        Table table = new Table();
+        Attribute[] attributes = new Attribute[2];
+        attributes[0] = new Attribute("id", 1, 0, "id");
+        attributes[1] = new Attribute("name", 2, 1, "name");
+        table.setAttributes(attributes);
+        return table;
+    }
+
+    public Attribute[] getClusterAttributes() {
+        Attribute[] attributes = new Attribute[1];
+        attributes[0] = new Attribute("id", 1, 0, "id");
+        return attributes;
+    }
+
+    public Attribute[] getSecondAttributes() {
+        Attribute[] attributes = new Attribute[2];
+        attributes[0] = new Attribute("name", 1, 0, "name");
+        attributes[1] = new Attribute("id", 1, 1, "id");
+        return attributes;
     }
 
     @Test
@@ -157,18 +192,18 @@ public class BTreeTest {
         for (int i = 1; i <= insertSize; i++) {
             Random random = new Random();
             int toInsert = random.nextInt(insertSize);
-            Tuple tuple = genTuple(toInsert);
-            bpTree.insert(tuple, true);
+            IndexEntry indexEntry = genTuple(toInsert);
+            bpTree.insert(indexEntry, true);
         }
         printBtree(bpTree.getRoot());
         for (int i = 1; i <= insertSize * 5; i++) {
             Random random = new Random();
             int toInsert = random.nextInt(insertSize);
-            Tuple tuple = genTuple(toInsert);
+            IndexEntry indexEntry = genTuple(toInsert);
             if (insertSize % 2 == 0) {
-                bpTree.remove(tuple);
+                bpTree.remove(indexEntry);
             } else {
-                bpTree.insert(tuple, true);
+                bpTree.insert(indexEntry, true);
             }
         }
         BPNode bpNode = bpTree.getHead();
@@ -178,9 +213,9 @@ public class BTreeTest {
         }
         while (bpNode != null) {
             for (int i = bpNode.getEntries().size() - 1; i >= 0; i--) {
-                GetRes res = bpTree.getFirst(bpNode.getEntries().get(i));
+                Position res = bpTree.getFirst(bpNode.getEntries().get(i), false);
                 if (res != null) {
-                    bpTree.remove(res.getTuple());
+                    //                    bpTree.remove(res.getIndexEntry());
                 }
             }
             bpNode = bpNode.getPrevious();
@@ -230,7 +265,7 @@ public class BTreeTest {
 
     }
 
-    public static Tuple genTuple(int i) {
+    public static IndexEntry genTuple(int i) {
         Value[] values = new Value[2];
         values[0] = new ValueInt(i);
         Random random = new Random();
@@ -243,7 +278,7 @@ public class BTreeTest {
             str = str.substring(0, 80);
         }
         values[1] = new ValueString(str);
-        return new Tuple(values);
+        return new IndexEntry(values);
     }
 
 }

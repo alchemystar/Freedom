@@ -16,14 +16,14 @@ import alchemystar.freedom.util.BufferWrapper;
  *
  * @Author lizhuyang
  */
-public class Tuple {
+public class IndexEntry {
     // 元组中的值
     protected Value[] values;
 
-    public Tuple() {
+    public IndexEntry() {
     }
 
-    public Tuple(Value[] values) {
+    public IndexEntry(Value[] values) {
         this.values = values;
     }
 
@@ -79,36 +79,36 @@ public class Tuple {
     // 注意,另一个tuple的可能是个索引,所以两者column的length可能不等
     // 同时,由于最终索引会加两个值表示pageNo和offset,所以,应该比传进来的tuple长度大
     // todo 字典序compare
-    public int compareIndex(Tuple tuple) {
-        //        int min = values.length < tuple.getValues().length ? values.length : tuple.getValues().length;
+    public int compareIndex(IndexEntry indexEntry) {
+        //        int min = values.length < indexEntry.getValues().length ? values.length : indexEntry.getValues().length;
         //        for (int i = 0; i < min; i++) {
-        //            int comp = values[i].compare(tuple.getValues()[i]);
+        //            int comp = values[i].compare(indexEntry.getValues()[i]);
         //            if (comp == 0) {
         //                continue;
         //            }
         //            return comp;
         //        }
         //        return 0;
-        return compare(tuple);
+        return compare(indexEntry);
     }
 
     // 用于索引的tuple比较
-    public int compare(Tuple tuple) {
-        int min = values.length < tuple.getValues().length ? values.length : tuple.getValues().length;
+    public int compare(IndexEntry indexEntry) {
+        int min = values.length < indexEntry.getValues().length ? values.length : indexEntry.getValues().length;
         int comp = 0;
         for (int i = 0; i < min; i++) {
-            comp = values[i].compare(tuple.getValues()[i]);
+            comp = values[i].compare(indexEntry.getValues()[i]);
             if (comp == 0) {
                 continue;
             }
         }
         // 到这,表明前面的都相等
         if (comp == 0) {
-            if (values.length == tuple.getValues().length) {
+            if (values.length == indexEntry.getValues().length) {
                 return 0;
             }
             // 长度小的在前面
-            if (values.length < tuple.getValues().length) {
+            if (values.length < indexEntry.getValues().length) {
                 return -1;
             } else {
                 return 1;
@@ -127,7 +127,7 @@ public class Tuple {
 
     @Override
     public String toString() {
-        return "Tuple{" +
+        return "IndexEntry{" +
                 "values=" + Arrays.toString(values) +
                 '}';
     }
@@ -136,7 +136,7 @@ public class Tuple {
         return values;
     }
 
-    public Tuple setValues(Value[] values) {
+    public IndexEntry setValues(Value[] values) {
         this.values = values;
         return this;
     }
