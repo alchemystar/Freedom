@@ -5,8 +5,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.net.proto.mysql.BinaryPacket;
-import alchemystar.engine.net.proto.util.ByteUtil;
+import alchemystar.freedom.engine.net.proto.mysql.BinaryPacket;
+import alchemystar.freedom.engine.net.proto.util.ByteUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;

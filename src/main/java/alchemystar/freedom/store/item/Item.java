@@ -1,6 +1,6 @@
 package alchemystar.freedom.store.item;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.store.page.Page;
 
 /**
@@ -13,8 +13,8 @@ public class Item {
     private ItemPointer ptr;
     private ItemData data;
 
-    public Item(Tuple tuple) {
-        data = new ItemData(tuple);
+    public Item(IndexEntry indexEntry) {
+        data = new ItemData(indexEntry);
         ptr = new ItemPointer(0, data.getLength());
     }
 
@@ -38,7 +38,7 @@ public class Item {
         return data.getLength() + ptr.getPtrLength();
     }
 
-    public static int getItemLength(Tuple key) {
+    public static int getItemLength(IndexEntry key) {
         return key.getLength() + 8;
     }
 }

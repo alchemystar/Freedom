@@ -3,7 +3,7 @@ package alchemystar.freedom.store.page;
 import java.util.ArrayList;
 import java.util.List;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.store.item.ItemPointer;
 
 /**
@@ -15,7 +15,7 @@ import alchemystar.freedom.store.item.ItemPointer;
 public class PageLoader {
 
     Page page;
-    private Tuple[] tuples;
+    private IndexEntry[] indexEntries;
     private int tupleCount;
 
     public PageLoader(Page page) {
@@ -27,7 +27,7 @@ public class PageLoader {
         tupleCount = pageHeaderData.getTupleCount();
         int ptrStartOff = pageHeaderData.getLength();
         // 首先建立存储tuple的数组
-        List<Tuple> temp = new ArrayList<Tuple>();
+        List<IndexEntry> temp = new ArrayList<IndexEntry>();
         // 循环读取
         for (int i = 0; i < tupleCount; i++) {
             // 重新从page读取tuple
@@ -36,19 +36,19 @@ public class PageLoader {
                 continue;
             }
             byte[] bb = page.readBytes(ptr.getOffset(), ptr.getTupleLength());
-            Tuple tuple = new Tuple();
-            tuple.read(bb);
-            temp.add(tuple);
+            IndexEntry indexEntry = new IndexEntry();
+            indexEntry.read(bb);
+            temp.add(indexEntry);
             // 进入到下一个元组位置
             ptrStartOff = ptrStartOff + ptr.getTupleLength();
         }
         // 由于可能由于被删除,置为-1,所以以temp为准
-        tuples = temp.toArray(new Tuple[temp.size()]);
+        indexEntries = temp.toArray(new IndexEntry[temp.size()]);
         tupleCount = temp.size();
     }
 
-    public Tuple[] getTuples() {
-        return tuples;
+    public IndexEntry[] getIndexEntries() {
+        return indexEntries;
     }
 
     public int getTuplCount() {

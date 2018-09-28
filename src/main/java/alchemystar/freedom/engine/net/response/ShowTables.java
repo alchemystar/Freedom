@@ -3,17 +3,14 @@ package alchemystar.freedom.engine.net.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import alchemystar.engine.Database;
-import alchemystar.engine.Session;
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.proto.mysql.EOFPacket;
-import alchemystar.engine.net.proto.mysql.FieldPacket;
-import alchemystar.engine.net.proto.mysql.ResultSetHeaderPacket;
-import alchemystar.engine.net.proto.mysql.RowDataPacket;
-import alchemystar.engine.net.proto.util.Fields;
-import alchemystar.engine.net.proto.util.PacketUtil;
-import alchemystar.engine.net.proto.util.StringUtil;
-import alchemystar.schema.Schema;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.proto.mysql.EOFPacket;
+import alchemystar.freedom.engine.net.proto.mysql.FieldPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ResultSetHeaderPacket;
+import alchemystar.freedom.engine.net.proto.mysql.RowDataPacket;
+import alchemystar.freedom.engine.net.proto.util.Fields;
+import alchemystar.freedom.engine.net.proto.util.PacketUtil;
+import alchemystar.freedom.engine.net.proto.util.StringUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -40,7 +37,8 @@ public final class ShowTables {
         eof.packetId = ++packetId;
     }
 
-    public static void response(FrontendConnection c) {ChannelHandlerContext ctx = c.getCtx();
+    public static void response(FrontendConnection c) {
+        ChannelHandlerContext ctx = c.getCtx();
         ByteBuf buffer = ctx.alloc().buffer();
 
         // write header
@@ -57,7 +55,7 @@ public final class ShowTables {
         // write rows
         byte packetId = eof.packetId;
 
-        for (String name : getTables(c.getSession())) {
+        for (String name : getTables()) {
             RowDataPacket row = new RowDataPacket(FIELD_COUNT);
             row.add(StringUtil.encode(name, c.getCharset()));
             row.packetId = ++packetId;
@@ -73,20 +71,10 @@ public final class ShowTables {
         ctx.writeAndFlush(buffer);
     }
 
-    private static List<String> getTables(Session session) {
-        String schemaName = session.getCurrentSchemaName();
-        if (schemaName == null) {
-            throw new RuntimeException(" No database selected");
-        }
-        Database database = Database.getInstance();
+    private static List<String> getTables() {
         ArrayList<String> list = new ArrayList<String>();
-        Schema schema = database.findSchema(schemaName);
-        if (schema == null) {
-            throw new RuntimeException(" No Such Database");
-        }
-        for (String key : schema.getTablesAndViews().keySet()) {
-            list.add(key);
-        }
+        // todo
+        list.add("test");
         return list;
     }
 }

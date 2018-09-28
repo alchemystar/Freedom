@@ -1,6 +1,6 @@
 package alchemystar.freedom.index.bp;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 
 /**
  * Get请求的返回值
@@ -13,11 +13,11 @@ public class Position {
 
     private int position;
 
-    private Tuple tuple;
+    private IndexEntry searchEntry;
 
-    public Position(BPNode bpNode, Tuple tuple) {
+    public Position(BPNode bpNode, int position) {
         this.bpNode = bpNode;
-        this.tuple = tuple;
+        this.position = position;
     }
 
     public BPNode getBpNode() {
@@ -29,13 +29,12 @@ public class Position {
         return this;
     }
 
-    public Tuple getTuple() {
-        return tuple;
+    public IndexEntry getSearchEntry() {
+        return searchEntry;
     }
 
-    public Position setTuple(Tuple tuple) {
-        this.tuple = tuple;
-        return this;
+    public void setSearchEntry(IndexEntry searchEntry) {
+        this.searchEntry = searchEntry;
     }
 
     public int getPosition() {
@@ -44,5 +43,9 @@ public class Position {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public void incrPosition() {
+        position++;
     }
 }

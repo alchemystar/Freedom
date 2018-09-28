@@ -7,12 +7,11 @@ import com.alibaba.druid.sql.ast.expr.SQLNumericLiteralExpr;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import com.alibaba.druid.sql.ast.expr.SQLTextLiteralExpr;
 
-import alchemystar.hero.meta.value.Value;
-import alchemystar.hero.meta.value.ValueInt;
-import alchemystar.hero.meta.value.ValueLong;
-import alchemystar.hero.meta.value.ValueString;
-import alchemystar.hero.sql.parser.SelectVisitor;
-import alchemystar.hero.sql.select.TableFilter;
+import alchemystar.freedom.meta.value.Value;
+import alchemystar.freedom.meta.value.ValueInt;
+import alchemystar.freedom.meta.value.ValueString;
+import alchemystar.freedom.sql.parser.SelectVisitor;
+import alchemystar.freedom.sql.select.TableFilter;
 
 /**
  * @Author lizhuyang

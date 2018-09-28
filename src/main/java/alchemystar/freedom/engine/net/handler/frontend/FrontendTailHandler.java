@@ -3,7 +3,7 @@ package alchemystar.freedom.engine.net.handler.frontend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 

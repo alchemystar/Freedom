@@ -5,10 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.Database;
-import alchemystar.engine.config.SystemConfig;
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.handler.frontend.ServerQueryHandler;
+import alchemystar.freedom.config.SystemConfig;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.handler.frontend.ServerQueryHandler;
 
 /**
  * FrontendConnection 工厂类
@@ -26,7 +25,6 @@ public class FrontConnectionFactory {
 
     public FrontendConnection getConnection() {
         FrontendConnection connection = new FrontendConnection();
-        connection.setSession(Database.getSession());
         connection.setQueryHandler(new ServerQueryHandler(connection));
         connection.setId(ACCEPT_SEQ.getAndIncrement());
         logger.info("connection Id=" + connection.getId());

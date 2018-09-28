@@ -1,8 +1,8 @@
 package alchemystar.freedom.sql;
 
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.parser.SQLStatementParser;
 
+import alchemystar.freedom.meta.TableManager;
 import alchemystar.freedom.sql.parser.CreateVisitor;
 
 /**
@@ -10,21 +10,20 @@ import alchemystar.freedom.sql.parser.CreateVisitor;
  */
 public class CreateExecutor {
 
-    private String sql;
+    private SQLStatement sqlStatement;
 
     private CreateVisitor createVisitor;
 
-    public CreateExecutor(String sql) {
-        this.sql = sql;
+    public CreateExecutor(SQLStatement sqlStatement) {
+        this.sqlStatement = sqlStatement;
     }
 
     public void execute() {
         init();
+        TableManager.addTable(createVisitor.getTable());
     }
 
     public void init() {
-        SQLStatementParser parser = new SQLStatementParser(sql);
-        SQLStatement sqlStatement = parser.parseStatement();
         CreateVisitor createVisitor = new CreateVisitor();
         sqlStatement.accept(createVisitor);
         this.createVisitor = createVisitor;

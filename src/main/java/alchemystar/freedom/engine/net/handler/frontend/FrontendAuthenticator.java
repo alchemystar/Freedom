@@ -7,16 +7,16 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.Database;
-import alchemystar.engine.net.proto.mysql.AuthPacket;
-import alchemystar.engine.net.proto.mysql.BinaryPacket;
-import alchemystar.engine.net.proto.mysql.HandshakePacket;
-import alchemystar.engine.net.proto.mysql.OkPacket;
-import alchemystar.engine.net.proto.util.Capabilities;
-import alchemystar.engine.net.proto.util.ErrorCode;
-import alchemystar.engine.net.proto.util.RandomUtil;
-import alchemystar.engine.net.proto.util.SecurityUtil;
-import alchemystar.engine.net.proto.util.Versions;
+import alchemystar.freedom.engine.Database;
+import alchemystar.freedom.engine.net.proto.mysql.AuthPacket;
+import alchemystar.freedom.engine.net.proto.mysql.BinaryPacket;
+import alchemystar.freedom.engine.net.proto.mysql.HandshakePacket;
+import alchemystar.freedom.engine.net.proto.mysql.OkPacket;
+import alchemystar.freedom.engine.net.proto.util.Capabilities;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.net.proto.util.RandomUtil;
+import alchemystar.freedom.engine.net.proto.util.SecurityUtil;
+import alchemystar.freedom.engine.net.proto.util.Versions;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -83,9 +83,10 @@ public class FrontendAuthenticator extends ChannelHandlerAdapter {
             return;
         }
         source.setUser(authPacket.user);
-        if(!StringUtils.isEmpty(authPacket.database)) {
-            source.setSchema(authPacket.database);
-        }
+        // todo
+        //        if(!StringUtils.isEmpty(authPacket.database)) {
+        //            source.setSchema(authPacket.database);
+        //        }
         source.setHost(((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress());
         source.setPort(((InetSocketAddress) ctx.channel().remoteAddress()).getPort());
         success(ctx);

@@ -2,7 +2,7 @@ package alchemystar.freedom.transaction.rm;
 
 import java.nio.ByteBuffer;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 
 /**
  * LogRecord
@@ -15,11 +15,11 @@ public class LogRecord {
     // insert/update/delete commit/rollback
     private int operation;
     // 动作之前
-    private Tuple before;
+    private IndexEntry before;
     // 动作之后
-    private Tuple after;
+    private IndexEntry after;
 
-    public LogRecord(int txId, int operation, Tuple before, Tuple after) {
+    public LogRecord(int txId, int operation, IndexEntry before, IndexEntry after) {
         header.setTxId(txId);
         this.operation = operation;
         this.before = before;
@@ -66,20 +66,20 @@ public class LogRecord {
         return this;
     }
 
-    public Tuple getBefore() {
+    public IndexEntry getBefore() {
         return before;
     }
 
-    public LogRecord setBefore(Tuple before) {
+    public LogRecord setBefore(IndexEntry before) {
         this.before = before;
         return this;
     }
 
-    public Tuple getAfter() {
+    public IndexEntry getAfter() {
         return after;
     }
 
-    public LogRecord setAfter(Tuple after) {
+    public LogRecord setAfter(IndexEntry after) {
         this.after = after;
         return this;
     }

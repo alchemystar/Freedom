@@ -1,7 +1,7 @@
 package alchemystar.freedom.meta.factory;
 
 import alchemystar.freedom.config.SystemConfig;
-import alchemystar.freedom.meta.Relation;
+import alchemystar.freedom.meta.Table;
 
 /**
  * RelFactory
@@ -20,10 +20,8 @@ public class RelFactory {
         return relFactory;
     }
 
-    public Relation newRelation(String tableName) {
-        Relation relation = new Relation();
-        relation.setRelPath(SystemConfig.RELATION_FILE_PRE_FIX + tableName);
-        relation.setMetaPath(SystemConfig.RELATION_FILE_PRE_FIX + tableName + "_meta");
-        return relation;
+    public Table newRelation(String tableName) {
+        Table table = new Table();
+        return table;
     }
 }

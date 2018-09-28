@@ -2,15 +2,15 @@ package alchemystar.freedom.engine.net.response;
 
 import java.util.ArrayList;
 
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.proto.mysql.EOFPacket;
-import alchemystar.engine.net.proto.mysql.FieldPacket;
-import alchemystar.engine.net.proto.mysql.ResultSetHeaderPacket;
-import alchemystar.engine.net.proto.mysql.RowDataPacket;
-import alchemystar.engine.net.proto.util.Fields;
-import alchemystar.engine.net.proto.util.PacketUtil;
-import alchemystar.engine.net.proto.util.StringUtil;
-import alchemystar.value.Value;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.proto.mysql.EOFPacket;
+import alchemystar.freedom.engine.net.proto.mysql.FieldPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ResultSetHeaderPacket;
+import alchemystar.freedom.engine.net.proto.mysql.RowDataPacket;
+import alchemystar.freedom.engine.net.proto.util.Fields;
+import alchemystar.freedom.engine.net.proto.util.PacketUtil;
+import alchemystar.freedom.engine.net.proto.util.StringUtil;
+import alchemystar.freedom.meta.value.Value;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -40,10 +40,8 @@ public class SelectResponse {
         fields.add(field);
     }
 
-    public void response(FrontendConnection c) {
-        ChannelHandlerContext ctx = c.getCtx();
-        ByteBuf buffer = ctx.alloc().buffer();
-        buffer = header.writeBuf(buffer, ctx);
+    public void responseFields(FrontendConnection c, ByteBuf buffer) {
+        buffer = header.writeBuf(buffer, c.getCtx());
         for (Field field : fields) {
             FieldPacket packet = null;
             if (field.getType() == Value.LONG) {
@@ -55,10 +53,36 @@ public class SelectResponse {
                 packet = PacketUtil.getField(field.getFieldName(), Fields.FIELD_TYPE_VAR_STRING);
             }
             packet.packetId = ++packetId;
-            buffer = packet.writeBuf(buffer, ctx);
+            buffer = packet.writeBuf(buffer, c.getCtx());
         }
+    }
+
+    public void writeEof(FrontendConnection c, ByteBuf buffer) {
         eof.packetId = ++packetId;
-        buffer = eof.writeBuf(buffer, ctx);
+        eof.writeBuf(buffer, c.getCtx());
+    }
+
+    public void writeLastEof(FrontendConnection c, ByteBuf buffer) {
+        EOFPacket lastEof = new EOFPacket();
+        lastEof.packetId = ++packetId;
+        buffer = lastEof.writeBuf(buffer, c.getCtx());
+        c.getCtx().writeAndFlush(buffer);
+    }
+
+    public void writeRow(Value[] values, FrontendConnection c, ByteBuf buffer) {
+        RowDataPacket row = new RowDataPacket(fieldCount);
+        for (Value item : values) {
+            row.add(StringUtil.encode(item.getString(), c.getCharset()));
+        }
+        row.packetId = ++packetId;
+        row.writeBuf(buffer, c.getCtx());
+    }
+
+    public void response(FrontendConnection c) {
+        ChannelHandlerContext ctx = c.getCtx();
+        ByteBuf buffer = ctx.alloc().buffer();
+        responseFields(c, buffer);
+        writeEof(c, buffer);
         for (ArrayList<String> item : rows) {
             RowDataPacket row = new RowDataPacket(fieldCount);
             for (String value : item) {
@@ -68,10 +92,20 @@ public class SelectResponse {
             row.packetId = ++packetId;
             buffer = row.writeBuf(buffer, ctx);
         }
-        EOFPacket lastEof = new EOFPacket();
-        lastEof.packetId = ++packetId;
-        buffer = lastEof.writeBuf(buffer, ctx);
-        ctx.writeAndFlush(buffer);
+        writeLastEof(c, buffer);
+    }
+
+    public static int convertValueTypeToFieldType(int valueType) {
+        if (valueType == Value.BOOLEAN) {
+            return Fields.FIELD_TYPE_BIT;
+        } else if (valueType == Value.INT) {
+            return Fields.FIELD_TYPE_INT24;
+        } else if (valueType == Value.LONG) {
+            return Fields.FIELD_TYPE_LONG;
+        } else if (valueType == Value.STRING) {
+            return Fields.FIELD_TYPE_STRING;
+        }
+        throw new RuntimeException("not support this valueType : " + valueType);
     }
 
     public ArrayList<ArrayList<String>> getRows() {

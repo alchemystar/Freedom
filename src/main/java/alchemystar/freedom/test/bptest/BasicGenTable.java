@@ -3,6 +3,7 @@ package alchemystar.freedom.test.bptest;
 import alchemystar.freedom.index.bp.BPTree;
 import alchemystar.freedom.meta.Attribute;
 import alchemystar.freedom.meta.Table;
+import alchemystar.freedom.meta.value.Value;
 
 /**
  * @Author lizhuyang
@@ -24,23 +25,23 @@ public class BasicGenTable {
     public Attribute[] getTableAttributes() {
         Attribute[] attributes = new Attribute[3];
         // id 作为主键
-        attributes[0] = new Attribute("id", 1, 0, "id");
+        attributes[0] = new Attribute("id", Value.LONG, 0, "id");
         attributes[0].setPrimaryKey(true);
-        attributes[1] = new Attribute("name", 1, 1, "name");
-        attributes[2] = new Attribute("comment", 1, 2, "comment");
+        attributes[1] = new Attribute("name", Value.STRING, 1, "name");
+        attributes[2] = new Attribute("comment", Value.STRING, 2, "comment");
         return attributes;
     }
 
     public Attribute[] getClusterAttributes() {
         Attribute[] attributes = new Attribute[1];
-        attributes[0] = new Attribute("id", 1, 0, "id");
+        attributes[0] = new Attribute("id", Value.LONG, 0, "id");
         return attributes;
     }
 
     public Attribute[] getSecondAttributes() {
         Attribute[] attributes = new Attribute[2];
-        attributes[0] = new Attribute("name", 1, 0, "name");
-        attributes[1] = new Attribute("id", 1, 1, "id");
+        attributes[0] = new Attribute("name", Value.STRING, 0, "name");
+        attributes[1] = new Attribute("id", Value.LONG, 1, "id");
         return attributes;
     }
 }

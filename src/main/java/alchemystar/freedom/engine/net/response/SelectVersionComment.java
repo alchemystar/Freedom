@@ -1,12 +1,12 @@
 package alchemystar.freedom.engine.net.response;
 
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.proto.mysql.EOFPacket;
-import alchemystar.engine.net.proto.mysql.FieldPacket;
-import alchemystar.engine.net.proto.mysql.ResultSetHeaderPacket;
-import alchemystar.engine.net.proto.mysql.RowDataPacket;
-import alchemystar.engine.net.proto.util.Fields;
-import alchemystar.engine.net.proto.util.PacketUtil;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.proto.mysql.EOFPacket;
+import alchemystar.freedom.engine.net.proto.mysql.FieldPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ResultSetHeaderPacket;
+import alchemystar.freedom.engine.net.proto.mysql.RowDataPacket;
+import alchemystar.freedom.engine.net.proto.util.Fields;
+import alchemystar.freedom.engine.net.proto.util.PacketUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -18,7 +18,7 @@ import io.netty.channel.ChannelHandlerContext;
 public class SelectVersionComment {
 
     private static final byte[] VERSION_COMMENT =
-            "archer Server-1.0 author:alchemystar@163.com".getBytes();
+            "Freedom Server-0.1 author:alchemystar@163.com".getBytes();
     private static final int FIELD_COUNT = 1;
     private static final ResultSetHeaderPacket header = PacketUtil.getHeader(FIELD_COUNT);
     private static final FieldPacket[] fields = new FieldPacket[FIELD_COUNT];
@@ -35,7 +35,6 @@ public class SelectVersionComment {
 
     public static void response(FrontendConnection c) {
         ChannelHandlerContext ctx = c.getCtx();
-        // todo 精确的buffer申请
         ByteBuf buffer = ctx.alloc().buffer();
         // write header
         buffer = header.writeBuf(buffer, ctx);

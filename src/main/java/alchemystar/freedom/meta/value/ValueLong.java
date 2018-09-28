@@ -52,6 +52,16 @@ public class ValueLong extends Value {
         return i;
     }
 
+    @Override
+    public String getString() {
+        return String.valueOf(i);
+    }
+
+
+    public int getInt() {
+        return (int)i;
+    }
+
     public ValueLong setLong(long i) {
         this.i = i;
         return this;
@@ -59,7 +69,12 @@ public class ValueLong extends Value {
 
     @Override
     public int compare(Value value) {
-        long toCompare = (((ValueLong) value).getLong());
+        long toCompare;
+        if(value instanceof ValueInt){
+            toCompare = ((ValueInt)value).getInt();
+        }else {
+            toCompare = (((ValueLong) value).getLong());
+        }
         if (i > toCompare) {
             return 1;
         }
@@ -68,4 +83,26 @@ public class ValueLong extends Value {
         }
         return -1;
     }
+
+    @Override
+    public Value add(Value v) {
+        return new ValueLong(i + v.getLong());
+    }
+
+    public Value subtract(Value v) {
+        return new ValueLong(i - v.getLong());
+    }
+
+    public Value divide(Value v) {
+        return new ValueLong(i / v.getLong());
+    }
+
+    public Value multiply(Value v) {
+        return new ValueLong(i * v.getLong());
+    }
+
+    public Value concat(Value v) {
+        return new ValueString(this.toString() + v.toString());
+    }
+
 }

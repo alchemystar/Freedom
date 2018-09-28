@@ -1,6 +1,6 @@
 package alchemystar.freedom.store.item;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.store.page.Page;
 
 /**
@@ -13,15 +13,15 @@ public class ItemData {
 
     // 帧结构
     // [length]([type][length][data])*
-    private Tuple tuple;
+    private IndexEntry indexEntry;
     // Item实际存储的offset
     private int offset;
     // Item实际的长度
     private int length;
 
-    public ItemData(Tuple tuple) {
-        this.tuple = tuple;
-        length = tuple.getLength();
+    public ItemData(IndexEntry indexEntry) {
+        this.indexEntry = indexEntry;
+        length = indexEntry.getLength();
     }
 
     public void write(Page page) {
@@ -30,7 +30,7 @@ public class ItemData {
         // 找到写入位置
         int writePosition = page.getUpperOffset() - tupleLength;
         // 写入数据
-        page.writeBytes(tuple.getBytes(), writePosition);
+        page.writeBytes(indexEntry.getBytes(), writePosition);
         // 更新upperOffset
         page.modifyUpperOffset(writePosition);
         // 更新ItemData的offset,length

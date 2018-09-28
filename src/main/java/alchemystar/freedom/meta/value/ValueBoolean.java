@@ -50,6 +50,11 @@ public class ValueBoolean extends Value {
     }
 
     @Override
+    public String getString() {
+        return toString();
+    }
+
+    @Override
     public String toString() {
         if (b) {
             return "true";

@@ -5,10 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import alchemystar.freedom.access.ClusterIndexCursor;
+import alchemystar.freedom.access.Cursor;
+import alchemystar.freedom.access.SecondIndexCursor;
 import alchemystar.freedom.index.BaseIndex;
+import alchemystar.freedom.index.CompareType;
 import alchemystar.freedom.meta.Attribute;
-import alchemystar.freedom.meta.Relation;
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
+import alchemystar.freedom.meta.Table;
 import alchemystar.freedom.meta.value.ValueInt;
 import alchemystar.freedom.store.item.Item;
 import alchemystar.freedom.store.page.Page;
@@ -35,8 +39,8 @@ public class BPTree extends BaseIndex {
 
     protected Map<Integer, BPNode> nodeMap;
 
-    public BPTree(Relation relation, String indexName, Attribute[] attributes) {
-        super(relation, indexName, attributes);
+    public BPTree(Table table, String indexName, Attribute[] attributes) {
+        super(table, indexName, attributes);
         root = new BPNode(true, true, this);
         head = root;
         nodeMap = new HashMap<Integer, BPNode>();
@@ -50,7 +54,7 @@ public class BPTree extends BaseIndex {
     public int getRootPageNoFromMeta() {
         PageLoader loader = new PageLoader(fStore.readPageFromFile(0));
         loader.load();
-        return ((ValueInt) loader.getTuples()[0].getValues()[0]).getInt();
+        return ((ValueInt) loader.getIndexEntries()[0].getValues()[0]).getInt();
     }
 
     public BPNode getNodeFromPageNo(int pageNo) {
@@ -73,17 +77,62 @@ public class BPTree extends BaseIndex {
     }
 
     @Override
-    public GetRes getFirst(Tuple key) {
-        GetRes getRes = root.get(key);
-        // 由于存在key一样的情况,所以必须往前遍历,因为前面也可能有相同的key;
-        BPNode bpNode = getRes.getBpNode().getPrevious();
+    public Cursor searchEqual(IndexEntry key) {
+        Position startPos = getFirst(key, CompareType.EQUAL);
+        if (startPos == null) {
+            return null;
+        }
+        startPos.setSearchEntry(key);
+        if (isPrimaryKey) {
+            return new ClusterIndexCursor(startPos, null, true);
+        } else {
+            SecondIndexCursor cursor = new SecondIndexCursor(startPos, null, true);
+            cursor.setClusterIndex(table.getClusterIndex());
+            return cursor;
+        }
+    }
+
+    @Override
+    public Cursor searchRange(IndexEntry lowKey, IndexEntry upKey) {
+        Position startPos = getFirst(lowKey, CompareType.LOW);
+        if (startPos == null) {
+            return null;
+        }
+        Position endPos = null;
+        if (upKey != null) {
+            startPos.setSearchEntry(lowKey);
+            if (upKey != null) {
+                endPos = getLast(upKey, CompareType.UP);
+            }
+            if (endPos != null) {
+                endPos.setSearchEntry(upKey);
+            }
+        }
+        if (isPrimaryKey) {
+            return new ClusterIndexCursor(startPos, endPos, false);
+        } else {
+            SecondIndexCursor cursor = new SecondIndexCursor(startPos, endPos, false);
+            cursor.setClusterIndex(table.getClusterIndex());
+            return cursor;
+        }
+    }
+
+    @Override
+    public Position getFirst(IndexEntry outKey, int CompareType) {
+        IndexEntry key = buildEntry(outKey);
+        Position position = root.get(key.getCompareEntry(), CompareType);
+        if (position == null) {
+            return null;
+        }
+        // 由于存在key大量一样的情况,所以必须往前遍历,因为前面也可能有相同的key;
+        BPNode bpNode = position.getBpNode().getPrevious();
         while (bpNode != null) {
             // 从后往前倒查找
             for (int i = bpNode.getEntries().size() - 1; i >= 0; i--) {
-                Tuple item = bpNode.getEntries().get(i);
+                IndexEntry item = bpNode.getEntries().get(i);
                 if (item.compareIndex(key) == 0) {
-                    getRes.setBpNode(bpNode);
-                    getRes.setTuple(item);
+                    position.setBpNode(bpNode);
+                    position.setPosition(i);
                 }
                 if (!item.equals(key)) {
                     break;
@@ -91,20 +140,52 @@ public class BPTree extends BaseIndex {
             }
             bpNode = bpNode.getPrevious();
         }
-        return getRes;
+        return position;
+    }
+
+    @Override
+    public Position getLast(IndexEntry outKey, int compareType) {
+        IndexEntry key = buildEntry(outKey);
+        Position position = root.get(key.getCompareEntry(), compareType);
+        if (position == null) {
+            return null;
+        }
+        // 由于存在key一样的情况,所以必须往后遍历,因为前面也可能有相同的key;
+        BPNode bpNode = position.getBpNode().getNext();
+        while (bpNode != null) {
+            boolean notEqualFound = false;
+            // 从前往后查找
+            for (int i = 0; i < bpNode.entries.size(); i++) {
+                IndexEntry item = bpNode.getEntries().get(i);
+                if (item.compareIndex(key) == 0) {
+                    position.setBpNode(bpNode);
+                    position.setPosition(i);
+                }
+                if (!item.equals(key)) {
+                    notEqualFound = true;
+                    break;
+                }
+            }
+            if (notEqualFound) {
+                break;
+            } else {
+                bpNode = bpNode.getNext();
+            }
+        }
+        return position;
     }
 
     // 遍历当前bpNode以及之后的node
     @Override
-    public List<Tuple> getAll(Tuple key) {
-        GetRes res = getFirst(key);
-        List<Tuple> list = new ArrayList<Tuple>();
+    public List<IndexEntry> getAll(IndexEntry key) {
+        Position res = getFirst(key, CompareType.LOW);
+        List<IndexEntry> list = new ArrayList<IndexEntry>();
         BPNode bpNode = res.getBpNode();
         BPNode initNode = res.getBpNode();
         while (bpNode != null) {
-            for (Tuple tuple : bpNode.getEntries()) {
-                if (tuple.compareIndex(key) == 0) {
-                    list.add(tuple);
+            for (IndexEntry indexEntry : bpNode.getEntries()) {
+                if (indexEntry.compareIndex(key) == 0) {
+                    list.add(indexEntry);
                 } else {
                     // 这边对initNode做特殊处理的原因是
                     // 需要将计算出来的firstNode中的等值ke加进来
@@ -127,12 +208,12 @@ public class BPTree extends BaseIndex {
         return this;
     }
 
-    public boolean innerRemove(Tuple key) {
+    public boolean innerRemove(IndexEntry key) {
         return root.remove(key, this);
     }
 
     @Override
-    public int remove(Tuple key) {
+    public int remove(IndexEntry key) {
         int count = 0;
         while (true) {
             if (!innerRemove(key)) {
@@ -144,13 +225,15 @@ public class BPTree extends BaseIndex {
     }
 
     @Override
-    public boolean removeOne(Tuple key) {
-        return innerRemove(key);
+    public boolean removeOne(IndexEntry entry) {
+        IndexEntry matchIndexEntry = buildEntry(entry);
+        return innerRemove(matchIndexEntry);
     }
 
     @Override
-    public void insert(Tuple key, boolean isUnique) {
-        root.insert(key, this, isUnique);
+    public void insert(IndexEntry entry, boolean isUnique) {
+        IndexEntry matchIndexEntry = buildEntry(entry);
+        root.insert(matchIndexEntry, this, isUnique);
     }
 
     @Override

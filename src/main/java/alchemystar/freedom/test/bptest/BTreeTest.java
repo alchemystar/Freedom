@@ -5,6 +5,7 @@ import java.util.Random;
 import org.junit.Test;
 
 import alchemystar.freedom.access.Cursor;
+import alchemystar.freedom.index.CompareType;
 import alchemystar.freedom.index.bp.BPNode;
 import alchemystar.freedom.index.bp.BPTree;
 import alchemystar.freedom.index.bp.Position;
@@ -147,7 +148,7 @@ public class BTreeTest {
         while (BPNode != null) {
             for (int i = BPNode.getEntries().size() - 1; i >= 0; i--) {
                 // System.out.println(BPNode.getEntries().getFirst(i));
-                Position res = bpTree.getFirst(BPNode.getEntries().get(i), false);
+                Position res = bpTree.getFirst(BPNode.getEntries().get(i), CompareType.LOW);
                 //  IndexEntry indexEntry = res.getIndexEntry();
                 //                if (res != null) {
                 //                    bpTree.remove(indexEntry);
@@ -213,7 +214,7 @@ public class BTreeTest {
         }
         while (bpNode != null) {
             for (int i = bpNode.getEntries().size() - 1; i >= 0; i--) {
-                Position res = bpTree.getFirst(bpNode.getEntries().get(i), false);
+                Position res = bpTree.getFirst(bpNode.getEntries().get(i), CompareType.LOW);
                 if (res != null) {
                     //                    bpTree.remove(res.getIndexEntry());
                 }

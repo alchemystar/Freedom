@@ -1,6 +1,6 @@
 package alchemystar.freedom.access;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 
 /**
  * 扫描
@@ -9,5 +9,7 @@ import alchemystar.freedom.meta.Tuple;
  */
 public interface Cursor {
 
-    Tuple getNext();
+    IndexEntry next();
+
+    void reset();
 }

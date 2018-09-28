@@ -3,15 +3,15 @@ package alchemystar.freedom.engine.net.response;
 import java.util.ArrayList;
 import java.util.List;
 
-import alchemystar.engine.Database;
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.proto.mysql.EOFPacket;
-import alchemystar.engine.net.proto.mysql.FieldPacket;
-import alchemystar.engine.net.proto.mysql.ResultSetHeaderPacket;
-import alchemystar.engine.net.proto.mysql.RowDataPacket;
-import alchemystar.engine.net.proto.util.Fields;
-import alchemystar.engine.net.proto.util.PacketUtil;
-import alchemystar.engine.net.proto.util.StringUtil;
+import alchemystar.freedom.engine.Database;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.proto.mysql.EOFPacket;
+import alchemystar.freedom.engine.net.proto.mysql.FieldPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ResultSetHeaderPacket;
+import alchemystar.freedom.engine.net.proto.mysql.RowDataPacket;
+import alchemystar.freedom.engine.net.proto.util.Fields;
+import alchemystar.freedom.engine.net.proto.util.PacketUtil;
+import alchemystar.freedom.engine.net.proto.util.StringUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -75,9 +75,8 @@ public final class ShowDatabases {
     private static List<String> getSchemas() {
         Database database = Database.getInstance();
         ArrayList<String> list = new ArrayList<String>();
-        for (String key : database.getSchemas().keySet()) {
-            list.add(key);
-        }
+        // 当前没有schema概念
+        list.add("freedom");
         return list;
     }
 }

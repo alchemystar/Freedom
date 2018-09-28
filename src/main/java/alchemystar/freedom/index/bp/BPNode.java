@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alchemystar.freedom.constant.ItemConst;
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.index.CompareType;
+import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.store.fs.FStore;
 import alchemystar.freedom.store.item.Item;
 import alchemystar.freedom.store.page.PageFactory;
@@ -48,7 +49,7 @@ public class BPNode {
     /**
      * 节点的关键字
      */
-    protected List<Tuple> entries;
+    protected List<IndexEntry> entries;
 
     /**
      * 子节点
@@ -70,7 +71,7 @@ public class BPNode {
         this.bpTree = bpTree;
         this.pageNo = bpTree.getNextPageNo();
         // 默认root是false;
-        entries = new ArrayList<Tuple>();
+        entries = new ArrayList<IndexEntry>();
         if (!isLeaf) {
             children = new ArrayList<BPNode>();
         }
@@ -82,27 +83,40 @@ public class BPNode {
         this.isRoot = isRoot;
     }
 
-    public GetRes get(Tuple key) {
+    public Position get(IndexEntry key, int comareType) {
         if (isLeaf) {
-            for (Tuple tuple : entries) {
-                if (tuple.compareIndex(key) == 0) {
-                    return new GetRes(this, tuple);
+            for (int i = 0; i < entries.size(); i++) {
+                IndexEntry indexEntry = entries.get(i);
+                if (key.compareIndex(indexEntry) == 0) {
+                    return new Position(this, i);
                 }
             }
-            return null;
+            if (comareType == CompareType.EQUAL) {
+                return null;
+            } else {
+                // 如果不是isEqual模式,则是searchRange,需要返回postiion
+                // 最后的正确性靠checkCondition保证
+                // 从0开始
+                if (comareType == CompareType.LOW) {
+                    return new Position(this, 0);
+                } else {
+                    // position最后一个
+                    return new Position(this, entries.size() - 1);
+                }
+            }
         } else {
             // 非叶子节点
             // 如果key<最左边的key,沿第一个子节点继续搜索
             if (key.compareIndex(entries.get(0)) < 0) {
-                return children.get(0).get(key);
+                return children.get(0).get(key, comareType);
             } else if (key.compareIndex(entries.get(entries.size() - 1)) >= 0) {
                 // 如果key >  最右边的key,则按照最后一个子节点搜索
-                return children.get(children.size() - 1).get(key);
+                return children.get(children.size() - 1).get(key, comareType);
             } else {
                 for (int i = 0; i < entries.size(); i++) {
                     // 比key大的前一个子节点继续搜索
                     if (key.compareIndex(entries.get(i)) >= 0 && key.compareIndex(entries.get(i + 1)) < 0) {
-                        return children.get(i + 1).get(key);
+                        return children.get(i + 1).get(key, comareType);
                     }
                 }
             }
@@ -110,14 +124,18 @@ public class BPNode {
         return null;
     }
 
-    public void insert(Tuple key, BPTree tree, boolean isUnique) {
-        if (getBorrowKeyLength(key) > bpPage.getInitFreeSpace() / 3) {
-            throw new RuntimeException("key size must <= Max/3");
+    public void insert(IndexEntry entry, BPTree tree, boolean isUnique) {
+        if (getBorrowKeyLength(entry) > bpPage.getInitFreeSpace() / 3) {
+            throw new RuntimeException("entry size must <= Max/3");
+        }
+        // 如果是唯一索引,则进行duplicated key 检查
+        if (isUnique) {
+            innerCheckExist(entry);
         }
         if (isLeaf) {
             // 无需分裂
-            if (!isLeafSplit(key)) {
-                innerInsert(key, isUnique);
+            if (!isLeafSplit(entry)) {
+                innerInsert(entry);
             } else {
                 // 需要分裂
                 // 则分裂成左右两个节点
@@ -140,7 +158,7 @@ public class BPNode {
                 previous = null;
                 next = null;
                 // 插入后再分裂
-                innerInsert(key, isUnique);
+                innerInsert(entry);
                 int leftSize = this.entries.size() / 2;
                 int rightSize = this.entries.size() - leftSize;
 
@@ -168,7 +186,7 @@ public class BPNode {
                     // 回收
                     recycle();
                     // 插入关键字
-                    parent.innerInsert(right.getEntries().get(0), isUnique);
+                    parent.innerInsert(right.getEntries().get(0).getCompareEntry());
                     // 更新
                     parent.updateInsert(tree);
                     setParent(null);
@@ -185,24 +203,24 @@ public class BPNode {
                     // 回收
                     recycle();
                     // 插入关键字
-                    parent.innerInsert(right.getEntries().get(0), isUnique);
+                    parent.innerInsert(right.getEntries().get(0).getCompareEntry());
                     // 更新根节点
                     parent.updateInsert(tree);
                 }
             }
         } else {
             // 如果不是叶子节点,沿着第一个子节点继续搜索
-            if (key.compareIndex(entries.get(0)) < 0) {
-                children.get(0).insert(key, tree, isUnique);
-            } else if (key.compareIndex(entries.get(entries.size() - 1)) >= 0) {
+            if (entry.compareIndex(entries.get(0)) < 0) {
+                children.get(0).insert(entry, tree, isUnique);
+            } else if (entry.compareIndex(entries.get(entries.size() - 1)) >= 0) {
                 // 沿最后一个子节点继续搜索
-                children.get(children.size() - 1).insert(key, tree, isUnique);
+                children.get(children.size() - 1).insert(entry, tree, isUnique);
             } else {
                 //否则沿比key大的前一个子节点继续搜索
                 for (int i = 0; i < entries.size(); i++) {
                     // 比key大的前一个子节点继续搜索
-                    if (key.compareIndex(entries.get(i)) >= 0 && key.compareIndex(entries.get(i + 1)) < 0) {
-                        children.get(i + 1).insert(key, tree, isUnique);
+                    if (entry.compareIndex(entries.get(i)) >= 0 && entry.compareIndex(entries.get(i + 1)) < 0) {
+                        children.get(i + 1).insert(entry, tree, isUnique);
                         break;
                     }
                 }
@@ -210,7 +228,7 @@ public class BPNode {
         }
     }
 
-    protected boolean remove(Tuple key, BPTree tree) {
+    protected boolean remove(IndexEntry key, BPTree tree) {
         boolean found = false;
         // 如果是叶子节点
         if (isLeaf) {
@@ -423,41 +441,47 @@ public class BPNode {
         }
     }
 
+    // 一致性检测,通过使用compareEntry来实现
+    protected void innerCheckExist(IndexEntry indexEntry) {
+        for (int i = 0; i < entries.size(); i++) {
+            if (entries.get(i).getCompareEntry().compareIndex(indexEntry) == 0) {
+                throw new RuntimeException("Duplicated Key error");
+            }
+        }
+    }
+
     /**
      * 插入到当前节点的关键字中
      * 有序
      */
-    protected void innerInsert(Tuple tuple, boolean isUnique) {
+    protected void innerInsert(IndexEntry indexEntry) {
         //如果关键字列表长度为0，则直接插入
         if (entries.size() == 0) {
-            entries.add(tuple);
+            entries.add(indexEntry);
             return;
         }
         //否则遍历列表
         for (int i = 0; i < entries.size(); i++) {
             //如果该关键字键值已存在，则更新
-            if (entries.get(i).compareIndex(tuple) == 0) {
-                if (isUnique) {
-                    throw new RuntimeException("Duplicated Key error");
-                }
+            if (entries.get(i).compareIndex(indexEntry) == 0) {
                 // 如果相等的话,放在相等集合中的任何一个插入点都是可以的
-                entries.add(i, tuple);
+                entries.add(i, indexEntry);
                 return;
                 //否则插入
-            } else if (entries.get(i).compareIndex(tuple) > 0) {
+            } else if (entries.get(i).compareIndex(indexEntry) > 0) {
                 //插入到链首
                 if (i == 0) {
-                    entries.add(0, tuple);
+                    entries.add(0, indexEntry);
                     return;
                     //插入到中间
                 } else {
-                    entries.add(i, tuple);
+                    entries.add(i, indexEntry);
                     return;
                 }
             }
         }
         //插入到末尾
-        entries.add(entries.size(), tuple);
+        entries.add(entries.size(), indexEntry);
     }
 
     private void borrowNodePrevious(BPNode previous) {
@@ -471,7 +495,7 @@ public class BPNode {
         // 3          10
         int parentIdx = getParentEntry(previous) + 1;
         // 先下放
-        Tuple downerKey = parent.getEntries().get(parentIdx);
+        IndexEntry downerKey = parent.getEntries().get(parentIdx);
         // 由于是向previous借,肯定是0
         entries.add(0, downerKey);
         // previous的上提
@@ -495,7 +519,7 @@ public class BPNode {
         // 将child也借过来
         int parentIdx = getParentEntry(next);
         // 先下放
-        Tuple downerKey = parent.getEntries().get(parentIdx);
+        IndexEntry downerKey = parent.getEntries().get(parentIdx);
         // 由于是向next借,所以肯定是最后
         entries.add(downerKey);
         // next的上提
@@ -513,7 +537,7 @@ public class BPNode {
     private void borrowLeafPrevious() {
         int size = previous.getEntries().size();
         // 从previous借最后一个过来,加到当前entry最前面
-        Tuple borrowKey = previous.getEntries().get(size - 1);
+        IndexEntry borrowKey = previous.getEntries().get(size - 1);
         previous.getEntries().remove(borrowKey);
         entries.add(0, borrowKey);
         // 找到当前节点在父节点中的entries
@@ -524,7 +548,7 @@ public class BPNode {
 
     private void borrowLeafNext() {
         // 从next借第一个过来,加到当前entry最后面
-        Tuple borrowKey = next.getEntries().get(0);
+        IndexEntry borrowKey = next.getEntries().get(0);
         next.getEntries().remove(borrowKey);
         entries.add(borrowKey);
         // 找到当前节点的后继节点在父节点中的parent
@@ -561,7 +585,7 @@ public class BPNode {
                 right.getChildren().add(children.get(leftSize + i));
                 children.get(leftSize + i).setParent(right);
             }
-            Tuple keyToUpdateParent = entries.get(leftSize);
+            IndexEntry keyToUpdateParent = entries.get(leftSize);
             if (parent != null) {
                 int index = parent.getChildren().indexOf(this);
                 parent.getChildren().remove(this);
@@ -570,7 +594,7 @@ public class BPNode {
                 parent.getChildren().add(index, left);
                 parent.getChildren().add(index + 1, right);
                 // 插入关键字
-                parent.innerInsert(keyToUpdateParent, false);
+                parent.innerInsert(keyToUpdateParent);
                 // 父节点更新关键字
                 parent.updateInsert(tree);
                 recycle();
@@ -585,7 +609,7 @@ public class BPNode {
                 parent.getChildren().add(right);
                 recycle();
                 // 插入关键字
-                parent.innerInsert(keyToUpdateParent, false);
+                parent.innerInsert(keyToUpdateParent);
                 // 更新根节点
                 parent.updateInsert(tree);
             }
@@ -638,11 +662,11 @@ public class BPNode {
         return this;
     }
 
-    public List<Tuple> getEntries() {
+    public List<IndexEntry> getEntries() {
         return entries;
     }
 
-    public BPNode setEntries(List<Tuple> entries) {
+    public BPNode setEntries(List<IndexEntry> entries) {
         this.entries = entries;
         return this;
     }
@@ -657,17 +681,17 @@ public class BPNode {
     }
 
     // 判断当前节点是否包含此tuple
-    protected boolean leafContains(Tuple tuple) {
+    protected boolean leafContains(IndexEntry indexEntry) {
         // 这边由于
-        for (Tuple item : entries) {
-            if (item.compare(tuple) == 0) {
+        for (IndexEntry item : entries) {
+            if (item.compareIndex(indexEntry) == 0) {
                 return true;
             }
         }
         return false;
     }
 
-    protected int getRemoveKeyIndex(Tuple key) {
+    protected int getRemoveKeyIndex(IndexEntry key) {
         int index = 0;
         for (int i = 0; i < entries.size(); i++) {
             if (entries.get(i).compareIndex(key) == 0) {
@@ -679,12 +703,12 @@ public class BPNode {
     }
 
     // 删除节点
-    protected boolean remove(Tuple key) {
+    protected boolean remove(IndexEntry key) {
         int index = -1;
         boolean foud = false;
         for (int i = 0; i < entries.size(); i++) {
             // 由于是leaf,所以要比较所有的key
-            if (entries.get(i).compare(key) == 0) {
+            if (entries.get(i).compareIndex(key) == 0) {
                 index = i;
                 foud = true;
                 break;
@@ -700,7 +724,7 @@ public class BPNode {
         }
     }
 
-    public boolean isLeafSplit(Tuple key) {
+    public boolean isLeafSplit(IndexEntry key) {
         if (bpPage.cacluateRemainFreeSpace() < Item.getItemLength(key)) {
             return true;
         }
@@ -714,7 +738,7 @@ public class BPNode {
         return false;
     }
 
-    public boolean canRemoveDirect(Tuple key) {
+    public boolean canRemoveDirect(IndexEntry key) {
         if ((bpPage.getContentSize() - Item.getItemLength(key)) > bpPage.getInitFreeSpace() / 2) {
             return true;
         }
@@ -723,7 +747,7 @@ public class BPNode {
 
     public boolean canLeafBorrowPrevious() {
         if (previous != null && previous.getEntries().size() > 2 && previous.getParent() == parent) {
-            Tuple borrowKey = previous.getEntries().get(previous.getEntries().size() - 1);
+            IndexEntry borrowKey = previous.getEntries().get(previous.getEntries().size() - 1);
             int borrowKeyLength = getBorrowKeyLength(borrowKey);
             if ((previous.bpPage.getContentSize() - borrowKeyLength > previous.bpPage.getInitFreeSpace() / 2)) {
                 return true;
@@ -738,7 +762,7 @@ public class BPNode {
 
     public boolean canLeafBorrowNext() {
         if (next != null && next.getEntries().size() > 2 && next.getParent() == parent) {
-            Tuple borrowKey = next.getEntries().get(0);
+            IndexEntry borrowKey = next.getEntries().get(0);
             int borrowKeyLength = getBorrowKeyLength(borrowKey);
             if ((next.bpPage.getContentSize() - borrowKeyLength > next.bpPage.getInitFreeSpace() / 2)) {
                 return true;
@@ -765,7 +789,7 @@ public class BPNode {
         return canNodeBorrow(bpNode, bpNode.getEntries().get(0));
     }
 
-    public boolean canNodeBorrow(BPNode bpNode, Tuple key) {
+    public boolean canNodeBorrow(BPNode bpNode, IndexEntry key) {
         if (bpNode == null) {
             return false;
         }
@@ -809,7 +833,7 @@ public class BPNode {
             if (!bpNode.isLeaf()) {
                 int parentIdx = this.getParentEntry(this);
                 // 事实上是父parent的entry下移
-                Tuple downKey = this.getParent().getEntries().get(parentIdx);
+                IndexEntry downKey = this.getParent().getEntries().get(parentIdx);
                 adjutSize = Item.getItemLength(downKey);
             }
             if (bpNode.bpPage.getContentSize() + adjutSize <= bpPage.cacluateRemainFreeSpace()) {
@@ -828,7 +852,7 @@ public class BPNode {
             if (!bpNode.isLeaf()) {
                 int parentIdx = this.getParentEntry(bpNode);
                 // 事实上是父parent的entry下移
-                Tuple downKey = this.getParent().getEntries().get(parentIdx);
+                IndexEntry downKey = this.getParent().getEntries().get(parentIdx);
                 adjutSize = Item.getItemLength(downKey);
             }
             if (bpNode.bpPage.getContentSize() + adjutSize <= bpPage.cacluateRemainFreeSpace()) {
@@ -856,7 +880,7 @@ public class BPNode {
         return this;
     }
 
-    private int getBorrowKeyLength(Tuple key) {
+    private int getBorrowKeyLength(IndexEntry key) {
         // 因为borrowKey的话,需要将child也borrow过来
         if (!isLeaf) {
             return Item.getItemLength(key) + ItemConst.INT_LEANGTH;

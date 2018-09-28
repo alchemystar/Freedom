@@ -2,7 +2,7 @@ package alchemystar.freedom.store.page;
 
 import java.util.List;
 
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.store.item.Item;
 import alchemystar.freedom.store.item.ItemPointer;
 import alchemystar.freedom.util.BufferWrapper;
@@ -41,8 +41,8 @@ public class Page {
         pageHeaderData.decTupleCount(page);
     }
 
-    public boolean spaceEnough(Tuple tuple) {
-        Item item = new Item(tuple);
+    public boolean spaceEnough(IndexEntry indexEntry) {
+        Item item = new Item(indexEntry);
         if (remainFreeSpace() < item.getLength()) {
             return false;
         } else {
@@ -50,8 +50,8 @@ public class Page {
         }
     }
 
-    public boolean writeTuple(Tuple tuple) {
-        return writeItem(new Item(tuple));
+    public boolean writeTuple(IndexEntry indexEntry) {
+        return writeItem(new Item(indexEntry));
     }
 
     public boolean writeItem(Item item) {
@@ -77,7 +77,7 @@ public class Page {
             if (writeItem(item)) {
                 continue;
             } else {
-                throw new RuntimeException("Meta Info Two Long");
+                throw new RuntimeException("Meta Info too Long");
             }
         }
     }

@@ -3,20 +3,17 @@ package alchemystar.freedom.engine.net.handler.frontend;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.Session;
-import alchemystar.engine.net.proto.mysql.BinaryPacket;
-import alchemystar.engine.net.proto.mysql.ErrorPacket;
-import alchemystar.engine.net.proto.mysql.MySQLMessage;
-import alchemystar.engine.net.proto.mysql.OkPacket;
-import alchemystar.engine.net.proto.util.CharsetUtil;
-import alchemystar.engine.net.proto.util.ErrorCode;
-import alchemystar.engine.net.response.OkResponse;
-import alchemystar.engine.net.response.SelectResponse;
-import alchemystar.engine.parser.ServerParse;
+import alchemystar.freedom.engine.net.proto.mysql.BinaryPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ErrorPacket;
+import alchemystar.freedom.engine.net.proto.mysql.MySQLMessage;
+import alchemystar.freedom.engine.net.proto.mysql.OkPacket;
+import alchemystar.freedom.engine.net.proto.util.CharsetUtil;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.net.response.OkResponse;
+import alchemystar.freedom.sql.SqlExecutor;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -39,7 +36,6 @@ public class FrontendConnection {
     protected int charsetIndex;
     protected FrontendQueryHandler queryHandler;
     protected ChannelHandlerContext ctx;
-    protected Session session;
     // update by the ResponseHandler
     private long lastInsertId;
     private long lastActiveTime;
@@ -48,6 +44,7 @@ public class FrontendConnection {
 
     private volatile int txIsolation;
     private volatile boolean autocommit = true;
+    private SqlExecutor sqlExecutor = new SqlExecutor();
 
     // initDB的同时 bind BackendConnecton
     public void initDB(BinaryPacket bin) {
@@ -62,7 +59,6 @@ public class FrontendConnection {
                 writeOk();
             } else {
                 schema = db;
-                session.changeCurrentSchema(schema);
                 writeOk();
             }
             return;
@@ -72,7 +68,6 @@ public class FrontendConnection {
             return;
         } else {
             this.schema = db;
-            session.changeCurrentSchema(schema);
             writeOk();
             return;
         }
@@ -183,14 +178,7 @@ public class FrontendConnection {
     }
 
     public void execute(final String sql, final int type) {
-
-        if (type == ServerParse.SELECT) {
-            SelectResponse response = session.doQuery(sql);
-            response.response(this);
-        } else {
-            session.execute(sql);
-            OkResponse.response(this);
-        }
+        sqlExecutor.execute(sql, this);
         setLastActiveTime();
     }
 
@@ -211,18 +199,6 @@ public class FrontendConnection {
         } else {
             return false;
         }
-    }
-
-    public void createShema(String stmt) {
-        //去掉create
-        String s1 = stmt.substring(6, stmt.length()).trim();
-        //去掉database
-        String schema = s1.substring(8, s1.length()).trim();
-        if (StringUtils.isEmpty(schema)) {
-            throw new RuntimeException("schema must not empty");
-        }
-        session.getDatabase().addSchema(schema);
-        OkResponse.response(this);
     }
 
     public void commit() {
@@ -263,15 +239,6 @@ public class FrontendConnection {
 
     public void setHost(String host) {
         this.host = host;
-    }
-
-    public String getSchema() {
-        return schema;
-    }
-
-    public void setSchema(String schema) {
-        this.schema = schema;
-        session.changeCurrentSchema(schema);
     }
 
     public int getPort() {
@@ -324,14 +291,6 @@ public class FrontendConnection {
 
     public void setCtx(ChannelHandlerContext ctx) {
         this.ctx = ctx;
-    }
-
-    public Session getSession() {
-        return session;
-    }
-
-    public void setSession(Session session) {
-        this.session = session;
     }
 
     public long getLastActiveTime() {

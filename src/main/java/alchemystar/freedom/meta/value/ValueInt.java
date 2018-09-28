@@ -59,7 +59,12 @@ public class ValueInt extends Value {
 
     @Override
     public int compare(Value value) {
-        int toCompare = (((ValueInt) value).getInt());
+        int toCompare;
+        if (value instanceof ValueLong) {
+            toCompare = ((ValueLong) value).getInt();
+        } else {
+            toCompare = (((ValueInt) value).getInt());
+        }
         if (i > toCompare) {
             return 1;
         }
@@ -68,4 +73,35 @@ public class ValueInt extends Value {
         }
         return -1;
     }
+
+    @Override
+    public String getString() {
+        return String.valueOf(i);
+    }
+
+    @Override
+    public Value add(Value v) {
+        return new ValueInt(i + v.getInt());
+    }
+
+    public Value subtract(Value v) {
+        return new ValueInt(i - v.getInt());
+    }
+
+    public Value divide(Value v) {
+        return new ValueInt(i / v.getInt());
+    }
+
+    public Value multiply(Value v) {
+        return new ValueInt(i * v.getInt());
+    }
+
+    public Value concat(Value v) {
+        return new ValueString(this.toString() + v.toString());
+    }
+
+    public long getLong() {
+        return (long) i;
+    }
+
 }

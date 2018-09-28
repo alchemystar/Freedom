@@ -1,5 +1,11 @@
 package alchemystar.freedom.meta;
 
+import alchemystar.freedom.meta.value.Value;
+import alchemystar.freedom.meta.value.ValueBoolean;
+import alchemystar.freedom.meta.value.ValueInt;
+import alchemystar.freedom.meta.value.ValueLong;
+import alchemystar.freedom.meta.value.ValueString;
+
 /**
  * 属性
  *
@@ -15,6 +21,8 @@ public class Attribute {
     // 注释
     private String comment;
 
+    private boolean isPrimaryKey;
+
     public Attribute() {
     }
 
@@ -23,6 +31,22 @@ public class Attribute {
         this.type = type;
         this.index = index;
         this.comment = comment;
+    }
+
+    public Value getDefaultValue() {
+
+        switch (type) {
+            case Value.STRING:
+                return new ValueString("");
+            case Value.INT:
+                return new ValueInt(0);
+            case Value.LONG:
+                return new ValueLong(0);
+            case Value.BOOLEAN:
+                return new ValueBoolean(false);
+            default:
+                throw new RuntimeException("not support this type :" + type);
+        }
     }
 
     public String getName() {
@@ -59,5 +83,13 @@ public class Attribute {
     public Attribute setComment(String comment) {
         this.comment = comment;
         return this;
+    }
+
+    public boolean isPrimaryKey() {
+        return isPrimaryKey;
+    }
+
+    public void setPrimaryKey(boolean primaryKey) {
+        isPrimaryKey = primaryKey;
     }
 }

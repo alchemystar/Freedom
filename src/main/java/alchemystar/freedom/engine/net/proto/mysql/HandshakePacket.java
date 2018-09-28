@@ -1,7 +1,7 @@
 package alchemystar.freedom.engine.net.proto.mysql;
 
-import alchemystar.engine.net.proto.MySQLPacket;
-import alchemystar.engine.net.proto.util.BufferUtil;
+import alchemystar.freedom.engine.net.proto.MySQLPacket;
+import alchemystar.freedom.engine.net.proto.util.BufferUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 

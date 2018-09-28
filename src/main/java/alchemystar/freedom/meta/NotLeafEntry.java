@@ -11,8 +11,10 @@ public class NotLeafEntry extends IndexEntry {
         super(values);
     }
 
-    // cluster的飞叶子节点,其本身就是compare key
+    // cluster的非叶子节点,其本身就是compare key
     public IndexEntry getCompareEntry() {
         return this;
     }
+
+
 }

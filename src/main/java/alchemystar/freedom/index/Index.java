@@ -2,8 +2,9 @@ package alchemystar.freedom.index;
 
 import java.util.List;
 
-import alchemystar.freedom.index.bp.GetRes;
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.access.Cursor;
+import alchemystar.freedom.index.bp.Position;
+import alchemystar.freedom.meta.IndexEntry;
 
 /**
  * Index
@@ -12,14 +13,20 @@ import alchemystar.freedom.meta.Tuple;
  */
 public interface Index {
 
-    List<Tuple> getAll(Tuple key); // 查询所有符合条件的key
+    Cursor searchEqual(IndexEntry key);
 
-    GetRes getFirst(Tuple key);   // 查询第一个符合的key
+    Cursor searchRange(IndexEntry lowKey, IndexEntry upKey);
 
-    int remove(Tuple key);    // 移除所有符合key的数据
+    Position getFirst(IndexEntry entry, int compareType);   // 查询第一个符合的key
 
-    boolean removeOne(Tuple key);   // 删掉一个key
+    Position getLast(IndexEntry entry, int compareType); // 查询最后一个符合的key
 
-    void insert(Tuple key, boolean isUnique); // 插入
+    List<IndexEntry> getAll(IndexEntry entry); // 查询所有符合条件的key
+
+    int remove(IndexEntry entry);    // 移除所有符合key的数据
+
+    boolean removeOne(IndexEntry entry);   // 删掉一个key
+
+    void insert(IndexEntry entry, boolean isUnique); // 插入
 
 }

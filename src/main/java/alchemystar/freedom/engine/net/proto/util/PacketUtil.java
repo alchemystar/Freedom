@@ -2,10 +2,10 @@ package alchemystar.freedom.engine.net.proto.util;
 
 import java.io.UnsupportedEncodingException;
 
-import alchemystar.engine.net.proto.mysql.BinaryPacket;
-import alchemystar.engine.net.proto.mysql.ErrorPacket;
-import alchemystar.engine.net.proto.mysql.FieldPacket;
-import alchemystar.engine.net.proto.mysql.ResultSetHeaderPacket;
+import alchemystar.freedom.engine.net.proto.mysql.BinaryPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ErrorPacket;
+import alchemystar.freedom.engine.net.proto.mysql.FieldPacket;
+import alchemystar.freedom.engine.net.proto.mysql.ResultSetHeaderPacket;
 
 /**
  * PacketUtil

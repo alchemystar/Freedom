@@ -58,6 +58,38 @@ public class ValueString extends Value {
 
     @Override
     public int compare(Value value) {
-        return s.compareTo(((ValueString)value).getString());
+        return s.compareTo(((ValueString) value).getString());
+    }
+
+    @Override
+    public Value add(Value v) {
+        if (v instanceof ValueString) {
+            return new ValueString(s + ((ValueString) v).getString());
+        } else if (v instanceof ValueInt) {
+            return new ValueString(s + String.valueOf(((ValueInt) v).getInt()));
+        } else if (v instanceof ValueLong) {
+            return new ValueString(s + String.valueOf(((ValueLong) v).getLong()));
+        } else if (v instanceof ValueBoolean) {
+            return new ValueString(s + String.valueOf(((ValueBoolean) v).getBoolean()));
+        }
+        throw new RuntimeException("not support this type , valueType=" + v.getType());
+    }
+
+    @Override
+    public Value concat(Value v) {
+        if (v instanceof ValueString) {
+            return new ValueString(s + ((ValueString) v).getString());
+        } else if (v instanceof ValueInt) {
+            return new ValueString(s + String.valueOf(((ValueInt) v).getInt()));
+        } else if (v instanceof ValueLong) {
+            return new ValueString(s + String.valueOf(((ValueLong) v).getLong()));
+        } else if (v instanceof ValueBoolean) {
+            return new ValueString(s + String.valueOf(((ValueBoolean) v).getBoolean()));
+        }
+        throw new RuntimeException("not support this type , valueType=" + v.getType());
+    }
+
+    public static void main(String args[]) {
+        System.out.println("alchemystar1".compareTo("alchemystar10"));
     }
 }

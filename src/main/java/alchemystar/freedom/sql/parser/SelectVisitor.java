@@ -1,10 +1,14 @@
 package alchemystar.freedom.sql.parser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.druid.sql.ast.SQLExpr;
+import com.alibaba.druid.sql.ast.expr.SQLAllColumnExpr;
+import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
+import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
 import com.alibaba.druid.sql.ast.statement.SQLJoinTableSource;
 import com.alibaba.druid.sql.ast.statement.SQLSelectItem;
@@ -12,8 +16,9 @@ import com.alibaba.druid.sql.ast.statement.SQLSelectQueryBlock;
 import com.alibaba.druid.sql.ast.statement.SQLTableSource;
 import com.alibaba.druid.sql.visitor.SQLASTVisitorAdapter;
 
-import alchemystar.hero.meta.TableManager;
-import alchemystar.hero.sql.select.TableFilter;
+import alchemystar.freedom.meta.Attribute;
+import alchemystar.freedom.meta.TableManager;
+import alchemystar.freedom.sql.select.TableFilter;
 
 /**
  * @Author lizhuyang
@@ -26,15 +31,63 @@ public class SelectVisitor extends SQLASTVisitorAdapter {
     private Map<String, TableFilter> aliasMap = new HashMap<String, TableFilter>();
 
     public boolean visit(SQLSelectQueryBlock x) {
-        selectItems = x.getSelectList();
-        initTableFilter(x.getFrom());
         whereCondition = x.getWhere();
+        initTableFilter(x.getFrom());
+        // select必须在下面,已处理alias信息
+        handleWildCard(x.getSelectList());
         return false;
+    }
+
+    private void handleWildCard(List<SQLSelectItem> sqlSelectItems) {
+        selectItems = new ArrayList<SQLSelectItem>();
+        for (SQLSelectItem sqlSelectItem : sqlSelectItems) {
+            if (sqlSelectItem.getExpr() instanceof SQLAllColumnExpr) {
+                handleOneWildCard(sqlSelectItem);
+            } else {
+                if (sqlSelectItem.getExpr() instanceof SQLPropertyExpr) {
+                    SQLPropertyExpr sqlPropertyExpr = (SQLPropertyExpr) sqlSelectItem.getExpr();
+                    if (sqlPropertyExpr.getSimpleName().equals("*")) {
+                        handleOneWildCard(sqlSelectItem);
+                    }
+                } else {
+                    selectItems.add(sqlSelectItem);
+                }
+            }
+        }
+    }
+
+    private void handleOneWildCard(SQLSelectItem sqlSelectItem) {
+        SQLExpr sqlExpr = sqlSelectItem.getExpr();
+        Attribute[] attributes = null;
+        String owner = null;
+        if (sqlExpr instanceof SQLPropertyExpr) {
+            owner = ((SQLPropertyExpr) sqlExpr).getOwner().toString();
+            attributes = aliasMap.get(owner).getAttributes();
+        } else if (sqlExpr instanceof SQLAllColumnExpr) {
+            attributes = tableFilter.getAttributes();
+        }
+        for (Attribute attribute : attributes) {
+            SQLSelectItem item = new SQLSelectItem();
+            // 对 id,a.id做分开处理
+            if (owner != null) {
+                SQLPropertyExpr expr = new SQLPropertyExpr();
+                expr.setName(attribute.getName());
+                expr.setOwner(owner);
+                item.setExpr(expr);
+                selectItems.add(item);
+            } else {
+                SQLIdentifierExpr expr = new SQLIdentifierExpr();
+                expr.setName(attribute.getName());
+                item.setExpr(expr);
+                selectItems.add(item);
+            }
+        }
     }
 
     public void initTableFilter(SQLTableSource x) {
         if (x instanceof SQLExprTableSource) {
             tableFilter = TableManager.newTableFilter((SQLExprTableSource) x, this);
+            putTableFilter(tableFilter);
         } else if (x instanceof SQLJoinTableSource) {
             tableFilter = initTableFilter((SQLJoinTableSource) x);
         } else {
@@ -127,4 +180,5 @@ public class SelectVisitor extends SQLASTVisitorAdapter {
     public TableFilter getTableFilter(String alias) {
         return aliasMap.get(alias);
     }
+
 }

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import alchemystar.freedom.index.BaseIndex;
-import alchemystar.freedom.meta.Relation;
-import alchemystar.freedom.meta.Tuple;
+import alchemystar.freedom.meta.IndexEntry;
+import alchemystar.freedom.meta.Table;
 import alchemystar.freedom.store.item.Item;
 import alchemystar.freedom.transaction.rm.LogRecord;
 import alchemystar.freedom.transaction.rm.TransOPAction;
@@ -19,7 +19,7 @@ public class Transaction {
 
     private int txId;
 
-    private Relation relation;
+    private Table table;
 
     private TransactionManager manager = TransactionManager.getInstance();
     // 保存事务级别的unRedo
@@ -65,14 +65,14 @@ public class Transaction {
         // 记录级别的undo
         switch (record.getOperation()) {
             case TransOPAction.DELETE:
-                relation.insert(new Item(record.getAfter()));
+                // table.insert(new Item(record.getAfter()));
                 break;
             case TransOPAction.INSERT:
-                relation.delete(record.getAfter());
+                // table.delete(record.getAfter());
                 break;
             case TransOPAction.UPDATE:
-                relation.delete(record.getAfter());
-                relation.insert(record.getBefore());
+                // table.delete(record.getAfter());
+                table.insert(record.getBefore());
                 break;
             default:
                 break;
@@ -81,29 +81,29 @@ public class Transaction {
         // todo key相同的问题
         // todo 方法,每条记录有个唯一记录id
         // 索引级别的redo
-        for (BaseIndex index : relation.getIndexes()) {
-            Tuple key = index.convertToKey(record.getAfter());
-            switch (record.getOperation()) {
-                case TransOPAction.INSERT:
-                    // delete
-                    index.removeOne(key);
-                    break;
-                case TransOPAction.DELETE:
-                    // insert
-                    index.insert(key, index.isUnique());
-                    break;
-                case TransOPAction.UPDATE:
-                    // delete after
-                    // insert before
-                    index.removeOne(key);
-                    Tuple beforeKey = index.convertToKey(record.getBefore());
-                    index.insert(beforeKey, index.isUnique());
-                    break;
-                default:
-                    break;
-
-            }
-        }
+//        for (BaseIndex index : table.getSecondIndexes()) {
+//            IndexEntry key = index.convertToKey(record.getAfter());
+//            switch (record.getOperation()) {
+//                case TransOPAction.INSERT:
+//                    // delete
+//                    index.removeOne(key);
+//                    break;
+//                case TransOPAction.DELETE:
+//                    // insert
+//                    index.insert(key, index.isUnique());
+//                    break;
+//                case TransOPAction.UPDATE:
+//                    // delete after
+//                    // insert before
+//                    index.removeOne(key);
+//                    IndexEntry beforeKey = index.convertToKey(record.getBefore());
+//                    index.insert(beforeKey, index.isUnique());
+//                    break;
+//                default:
+//                    break;
+//
+//            }
+//        }
     }
 
     public int getState() {

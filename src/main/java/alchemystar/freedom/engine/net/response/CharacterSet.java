@@ -3,10 +3,10 @@ package alchemystar.freedom.engine.net.response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.proto.util.ErrorCode;
-import alchemystar.engine.net.proto.util.SplitUtil;
-import alchemystar.engine.parser.ServerParseSet;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.net.proto.util.SplitUtil;
+import alchemystar.freedom.engine.parser.ServerParseSet;
 
 /**
  * CharacterSet

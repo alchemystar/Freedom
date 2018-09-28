@@ -3,9 +3,8 @@ package alchemystar.freedom.engine.net.handler.frontend;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.engine.net.proto.util.ErrorCode;
-import alchemystar.engine.net.response.OkResponse;
-import alchemystar.engine.parser.ServerParse;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.parser.ServerParse;
 
 /**
  * ServerQueryHandler
@@ -52,14 +51,11 @@ public class ServerQueryHandler implements FrontendQueryHandler {
             case ServerParse.KILL_QUERY:
                 source.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, "Unsupported command");
                 break;
-            case ServerParse.USE:
-                UseHandler.handle(sql, source, rs >>> 8);
-                break;
             case ServerParse.EXPLAIN:
                 source.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, "Unsupported command");
                 break;
             case ServerParse.CREATE_DATABASE:
-                source.createShema(sql);
+                // source.createShema(sql);
                 break;
             case ServerParse.COMMIT:
                 source.commit();
@@ -67,9 +63,8 @@ public class ServerQueryHandler implements FrontendQueryHandler {
             case ServerParse.ROLLBACK:
                 source.rollBack();
                 break;
-            case ServerParse.RELOAD:
-                source.getSession().getDatabase().reload();
-                OkResponse.response(source);
+            case ServerParse.USE:
+                UseHandler.handle(sql, source, rs >>> 8);
                 break;
             default:
                 // todo add no modify exception

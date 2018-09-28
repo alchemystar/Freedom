@@ -1,6 +1,6 @@
 package alchemystar.freedom.engine.net.handler.frontend;
 
-import alchemystar.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
 
 /**
  * SavePointHandler

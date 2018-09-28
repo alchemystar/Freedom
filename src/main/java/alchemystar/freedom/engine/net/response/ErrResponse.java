@@ -2,8 +2,8 @@ package alchemystar.freedom.engine.net.response;
 
 import org.apache.commons.lang.StringUtils;
 
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.proto.mysql.ErrorPacket;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.proto.mysql.ErrorPacket;
 
 /**
  * ErrResponse

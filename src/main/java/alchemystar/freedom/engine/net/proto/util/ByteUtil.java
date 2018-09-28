@@ -1,6 +1,6 @@
 package alchemystar.freedom.engine.net.proto.util;
 
-import alchemystar.engine.net.proto.mysql.MySQLMessage;
+import alchemystar.freedom.engine.net.proto.mysql.MySQLMessage;
 import io.netty.buffer.ByteBuf;
 
 /**

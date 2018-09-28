@@ -1,6 +1,6 @@
 package alchemystar.freedom.engine.parser;
 
-import alchemystar.engine.parser.util.ParseUtil;
+import alchemystar.freedom.engine.parser.util.ParseUtil;
 
 /**
  * ServerParseSet

@@ -5,33 +5,44 @@ import org.junit.Test;
 import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.parser.SQLStatementParser;
 
-import alchemystar.hero.sql.SelectExecutor;
-import alchemystar.hero.sql.parser.SelectVisitor;
+import alchemystar.freedom.sql.SqlExecutor;
+import alchemystar.freedom.sql.parser.SelectVisitor;
 
 /**
  * @Author lizhuyang
  */
-public class SelectTest {
+public class SelectTest extends BasicSelectTest {
 
-    public static final String singleSql = "select id,name,id,name,id,name from test where id='1'";
+    public static final String singleSql = "select id,name,comment from test where id=1";
+
+    public static final String wildCardSql = "select * from test ";
 
     public static final String joinSql =
-            "select 'a.id='+a.id,'b.id='+b.id,'c.id='+c.id from test as a join test as b on a.id=b.id+1 join test as c "
-                    + "on b.id = c.id+1 "
+            "select 'a.id='+a.id,'b.id='+b.id,'c.id='+c.id,'a.name='+a.name from test as a join test as b on a.id=b"
+                    + ".id+1 "
+                    + "join "
+                    + "test as"
+                    + " c "
                     + "where a"
-                    + ".id>=3 and"
-                    + " b.id>=2";
+                    + ".id>=3 and a.id < 10 and "
+                    + " b.id>=2 and b.id < 10 and c.id>=1 and c.id < 10 and a.name < 'alchemystar5'";
 
     @Test
     public void selectSingleExecutor() {
-        SelectExecutor selectExecutor = new SelectExecutor(singleSql);
-        selectExecutor.query();
+        SqlExecutor sqlExecutor = new SqlExecutor();
+        sqlExecutor.execute(singleSql, null);
+    }
+
+    @Test
+    public void selectWildCardExecutor() {
+        SqlExecutor sqlExecutor = new SqlExecutor();
+        sqlExecutor.execute(wildCardSql, null);
     }
 
     @Test
     public void selectJoinExecutor() {
-        SelectExecutor selectExecutor = new SelectExecutor(joinSql);
-        selectExecutor.query();
+        SqlExecutor sqlExecutor = new SqlExecutor();
+        sqlExecutor.execute(joinSql, null);
     }
 
     @Test

@@ -1,14 +1,14 @@
 package alchemystar.freedom.sql.select;
 
-import alchemystar.hero.meta.Column;
-import alchemystar.hero.meta.value.Value;
+import alchemystar.freedom.meta.Attribute;
+import alchemystar.freedom.meta.value.Value;
 
 /**
  * @Author lizhuyang
  */
 public interface ColumnResolver {
 
-    Column[] getColumns();
+    Attribute[] getAttributes();
 
     Value getValue(String columnName);
 

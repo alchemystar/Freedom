@@ -1,11 +1,11 @@
 package alchemystar.freedom.engine.net.handler.factory;
 
-import alchemystar.engine.config.SystemConfig;
-import alchemystar.engine.net.codec.MySqlPacketDecoder;
-import alchemystar.engine.net.handler.frontend.FrontendAuthenticator;
-import alchemystar.engine.net.handler.frontend.FrontendConnection;
-import alchemystar.engine.net.handler.frontend.FrontendGroupHandler;
-import alchemystar.engine.net.handler.frontend.FrontendTailHandler;
+import alchemystar.freedom.config.SystemConfig;
+import alchemystar.freedom.engine.net.codec.MySqlPacketDecoder;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendAuthenticator;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendGroupHandler;
+import alchemystar.freedom.engine.net.handler.frontend.FrontendTailHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;

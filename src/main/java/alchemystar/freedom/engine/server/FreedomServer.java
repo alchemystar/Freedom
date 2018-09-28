@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import alchemystar.freedom.engine.Database;
-import alchemystar.freedom.engine.config.SocketConfig;
+import alchemystar.freedom.config.SocketConfig;
 import alchemystar.freedom.engine.net.handler.factory.FrontHandlerFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -37,7 +37,7 @@ public class FreedomServer extends Thread {
 
     @Override
     public void run() {
-        logger.info("Start The Rider");
+        logger.info("Start Freedom");
         startServer();
     }
 

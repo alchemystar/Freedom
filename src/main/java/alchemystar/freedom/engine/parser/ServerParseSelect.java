@@ -1,7 +1,7 @@
 package alchemystar.freedom.engine.parser;
 
-import alchemystar.engine.parser.util.CharTypes;
-import alchemystar.engine.parser.util.ParseUtil;
+import alchemystar.freedom.engine.parser.util.CharTypes;
+import alchemystar.freedom.engine.parser.util.ParseUtil;
 
 /**
  * ServerParseSelect

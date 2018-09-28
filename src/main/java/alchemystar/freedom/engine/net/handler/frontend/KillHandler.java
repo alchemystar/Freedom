@@ -1,8 +1,8 @@
 package alchemystar.freedom.engine.net.handler.frontend;
 
-import alchemystar.engine.net.proto.mysql.OkPacket;
-import alchemystar.engine.net.proto.util.ErrorCode;
-import alchemystar.engine.net.proto.util.StringUtil;
+import alchemystar.freedom.engine.net.proto.mysql.OkPacket;
+import alchemystar.freedom.engine.net.proto.util.ErrorCode;
+import alchemystar.freedom.engine.net.proto.util.StringUtil;
 import io.netty.channel.ChannelHandlerContext;
 
 /**
