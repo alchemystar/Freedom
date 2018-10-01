@@ -4,6 +4,7 @@ import org.junit.Before;
 
 import alchemystar.freedom.sql.SqlExecutor;
 import alchemystar.freedom.test.bptest.BasicGenTable;
+import alchemystar.freedom.test.sqltest.CreateTest;
 
 /**
  * @Author lizhuyang

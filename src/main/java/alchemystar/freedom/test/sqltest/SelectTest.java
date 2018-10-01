@@ -1,4 +1,4 @@
-package alchemystar.freedom.test;
+package alchemystar.freedom.test.sqltest;
 
 import org.junit.Test;
 
@@ -7,6 +7,7 @@ import com.alibaba.druid.sql.parser.SQLStatementParser;
 
 import alchemystar.freedom.sql.SqlExecutor;
 import alchemystar.freedom.sql.parser.SelectVisitor;
+import alchemystar.freedom.test.BasicSelectTest;
 
 /**
  * @Author lizhuyang
