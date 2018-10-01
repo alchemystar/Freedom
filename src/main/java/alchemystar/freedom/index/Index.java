@@ -29,4 +29,6 @@ public interface Index {
 
     void insert(IndexEntry entry, boolean isUnique); // 插入
 
+    void delete(IndexEntry entry);
+
 }

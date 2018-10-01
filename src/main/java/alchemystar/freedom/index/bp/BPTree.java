@@ -237,6 +237,12 @@ public class BPTree extends BaseIndex {
     }
 
     @Override
+    public void delete(IndexEntry entry) {
+        IndexEntry matchIndexEntry = buildEntry(entry);
+        root.remove(matchIndexEntry, this);
+    }
+
+    @Override
     public void flushToDisk() {
         writeMetaPage();
         // 深度遍历

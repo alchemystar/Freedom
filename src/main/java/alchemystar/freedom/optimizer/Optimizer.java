@@ -17,7 +17,7 @@ public class Optimizer {
     }
 
     public Index chooseIndex(IndexEntry entry) {
-        if(entry != null) {
+        if(entry != null && !entry.isAllNull()) {
             IndexDesc indexDesc = entry.getIndexDesc();
             // 如果包含主键id,则直接用主键id进行查询
             if (indexDesc.getPrimaryAttr() != null && entry.getValues()[indexDesc.getPrimaryAttr().getIndex()] !=

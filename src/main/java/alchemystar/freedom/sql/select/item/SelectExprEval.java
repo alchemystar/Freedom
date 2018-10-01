@@ -21,6 +21,8 @@ public class SelectExprEval {
     private SQLExpr expr;
 
     private SelectVisitor selectVisitor;
+    // for delete/update
+    private TableFilter simpleTableFilter;
 
     public SelectExprEval(SQLExpr expr, SelectVisitor selectVisitor) {
         this.expr = expr;
@@ -86,14 +88,31 @@ public class SelectExprEval {
 
     public Value evalPropertyExpr(SQLPropertyExpr expr) {
         String alias = expr.getOwner().toString();
-        TableFilter tableFilter = selectVisitor.getTableFilter(alias);
+        TableFilter tableFilter = null;
+        if (selectVisitor != null) {
+            tableFilter = selectVisitor.getTableFilter(alias);
+        } else {
+            tableFilter = simpleTableFilter;
+        }
         String columnName = expr.getSimpleName().toLowerCase();
         return tableFilter.getValue(columnName);
     }
 
     // 如果没有table alias,则走此逻辑
     public Value evalIdentifierExpr(SQLIdentifierExpr x) {
-        return selectVisitor.getTableFilter().getValue(x.getLowerName());
+        if (selectVisitor != null) {
+            return selectVisitor.getTableFilter().getValue(x.getLowerName());
+        } else {
+            // for delete/update
+            return simpleTableFilter.getTableFilter().getValue(x.getLowerName());
+        }
     }
 
+    public TableFilter getSimpleTableFilter() {
+        return simpleTableFilter;
+    }
+
+    public void setSimpleTableFilter(TableFilter simpleTableFilter) {
+        this.simpleTableFilter = simpleTableFilter;
+    }
 }

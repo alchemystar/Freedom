@@ -3,8 +3,8 @@ package alchemystar.freedom.engine.server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import alchemystar.freedom.engine.Database;
 import alchemystar.freedom.config.SocketConfig;
+import alchemystar.freedom.engine.Database;
 import alchemystar.freedom.engine.net.handler.factory.FrontHandlerFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -22,6 +22,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 public class FreedomServer extends Thread {
 
     private static final Logger logger = LoggerFactory.getLogger(FreedomServer.class);
+    public static final int BOSS_THREAD_COUNT = 1;
 
     public static void main(String[] args) {
         FreedomServer server = new FreedomServer();
@@ -42,8 +43,8 @@ public class FreedomServer extends Thread {
     }
 
     public void startServer() {
-        // acceptor
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        // acceptor , one port => one thread
+        EventLoopGroup bossGroup = new NioEventLoopGroup(BOSS_THREAD_COUNT);
         // worker
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 

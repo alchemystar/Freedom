@@ -40,7 +40,7 @@ public class ServerQueryHandler implements FrontendQueryHandler {
                 StartHandler.handle(sql, source, rs >>> 8);
                 break;
             case ServerParse.BEGIN:
-                BeginHandler.handle(sql, source);
+                source.begin();
                 break;
             case ServerParse.SAVEPOINT:
                 SavepointHandler.handle(sql, source);

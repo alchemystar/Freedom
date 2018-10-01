@@ -233,7 +233,7 @@ public class BPNode {
         // 如果是叶子节点
         if (isLeaf) {
             // 如果不包含此key,则直接返回
-            if (!leafContains(key)) {
+            if (!leafContainsForDelete(key)) {
                 return false;
             }
             found = true;
@@ -681,10 +681,10 @@ public class BPNode {
     }
 
     // 判断当前节点是否包含此tuple
-    protected boolean leafContains(IndexEntry indexEntry) {
+    protected boolean leafContainsForDelete(IndexEntry indexEntry) {
         // 这边由于
         for (IndexEntry item : entries) {
-            if (item.compareIndex(indexEntry) == 0) {
+            if (item.getDeleteCompareEntry().compareDeleteIndex(indexEntry) == 0) {
                 return true;
             }
         }
@@ -705,19 +705,19 @@ public class BPNode {
     // 删除节点
     protected boolean remove(IndexEntry key) {
         int index = -1;
-        boolean foud = false;
+        boolean found = false;
         for (int i = 0; i < entries.size(); i++) {
             // 由于是leaf,所以要比较所有的key
-            if (entries.get(i).compareIndex(key) == 0) {
+            if (entries.get(i).getDeleteCompareEntry().compareDeleteIndex(key) == 0) {
                 index = i;
-                foud = true;
+                found = true;
                 break;
             }
         }
         if (index != -1) {
             entries.remove(index);
         }
-        if (foud) {
+        if (found) {
             return true;
         } else {
             return false;

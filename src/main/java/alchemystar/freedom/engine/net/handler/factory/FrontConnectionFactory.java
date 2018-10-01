@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import alchemystar.freedom.config.SystemConfig;
 import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
 import alchemystar.freedom.engine.net.handler.frontend.ServerQueryHandler;
+import alchemystar.freedom.engine.session.SessionFactory;
 
 /**
  * FrontendConnection 工厂类
@@ -31,6 +32,7 @@ public class FrontConnectionFactory {
         connection.setCharset(SystemConfig.DEFAULT_CHARSET);
         connection.setTxIsolation(SystemConfig.DEFAULT_TX_ISOLATION);
         connection.setLastActiveTime();
+        connection.setSession(SessionFactory.newSession(connection));
         return connection;
     }
 }

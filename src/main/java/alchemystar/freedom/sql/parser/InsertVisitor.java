@@ -12,6 +12,7 @@ import com.alibaba.druid.sql.ast.statement.SQLInsertStatement;
 import com.alibaba.druid.sql.ast.statement.SQLTableSource;
 import com.alibaba.druid.sql.visitor.SchemaStatVisitor;
 
+import alchemystar.freedom.meta.ClusterIndexEntry;
 import alchemystar.freedom.meta.IndexDesc;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.Table;
@@ -51,7 +52,7 @@ public class InsertVisitor extends SchemaStatVisitor {
 
     public IndexEntry buildInsertEntry() {
         Value[] values = new Value[table.getAttributes().length];
-        IndexEntry indexEntry = new IndexEntry(values);
+        ClusterIndexEntry indexEntry = new ClusterIndexEntry(values);
         indexEntry.setIndexDesc(new IndexDesc(table.getAttributes()));
         for (int i = 0; i < values.length; i++) {
             String attributeName = table.getAttributes()[i].getName();

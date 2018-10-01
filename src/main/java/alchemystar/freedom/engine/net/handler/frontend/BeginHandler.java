@@ -1,7 +1,5 @@
 package alchemystar.freedom.engine.net.handler.frontend;
 
-import alchemystar.freedom.engine.net.proto.util.ErrorCode;
-
 /**
  * BeginHandler
  *
@@ -10,7 +8,8 @@ import alchemystar.freedom.engine.net.proto.util.ErrorCode;
 public final class BeginHandler {
 
     public static void handle(String stmt, FrontendConnection c) {
-        c.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, "Unsupported statement");
+        c.commit();
+        c.writeOk();
     }
 
 }

@@ -11,6 +11,7 @@ import alchemystar.freedom.engine.net.proto.mysql.RowDataPacket;
 import alchemystar.freedom.engine.net.proto.util.Fields;
 import alchemystar.freedom.engine.net.proto.util.PacketUtil;
 import alchemystar.freedom.engine.net.proto.util.StringUtil;
+import alchemystar.freedom.meta.TableManager;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -73,8 +74,9 @@ public final class ShowTables {
 
     private static List<String> getTables() {
         ArrayList<String> list = new ArrayList<String>();
-        // todo
-        list.add("test");
+        for (String tableName : TableManager.tableMap.keySet()) {
+            list.add(tableName);
+        }
         return list;
     }
 }

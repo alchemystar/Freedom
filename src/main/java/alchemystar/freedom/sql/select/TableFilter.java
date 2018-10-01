@@ -129,6 +129,7 @@ public class TableFilter implements ColumnResolver {
         // 如果没有filterCondition ,构造一个全为null的key
         if (filterCondition == null) {
             lowEntryKey = new IndexEntry(new Value[table.getAttributes().length]);
+            lowEntryKey.setAllNull(true);
             IndexDesc indexDesc = new IndexDesc(table.getAttributes());
             lowEntryKey.setIndexDesc(indexDesc);
             return;

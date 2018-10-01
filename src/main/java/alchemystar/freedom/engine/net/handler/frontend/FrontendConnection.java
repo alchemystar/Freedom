@@ -13,7 +13,8 @@ import alchemystar.freedom.engine.net.proto.mysql.OkPacket;
 import alchemystar.freedom.engine.net.proto.util.CharsetUtil;
 import alchemystar.freedom.engine.net.proto.util.ErrorCode;
 import alchemystar.freedom.engine.net.response.OkResponse;
-import alchemystar.freedom.sql.SqlExecutor;
+import alchemystar.freedom.engine.session.Session;
+import alchemystar.freedom.engine.session.SessionFactory;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -40,19 +41,20 @@ public class FrontendConnection {
     private long lastInsertId;
     private long lastActiveTime;
 
+    private Session session;
+
     private static final long AUTH_TIMEOUT = 15 * 1000L;
 
     private volatile int txIsolation;
     private volatile boolean autocommit = true;
-    private SqlExecutor sqlExecutor = new SqlExecutor();
 
     // initDB的同时 bind BackendConnecton
     public void initDB(BinaryPacket bin) {
+        session = SessionFactory.newSession(this);
         MySQLMessage mm = new MySQLMessage(bin.data);
         // to skip the packet type
         mm.position(1);
         String db = mm.readString();
-
         // 检查schema是否已经设置
         if (schema != null) {
             if (schema.equals(db)) {
@@ -178,7 +180,7 @@ public class FrontendConnection {
     }
 
     public void execute(final String sql, final int type) {
-        sqlExecutor.execute(sql, this);
+        session.execute(sql, this);
         setLastActiveTime();
     }
 
@@ -201,11 +203,18 @@ public class FrontendConnection {
         }
     }
 
+    public void begin() {
+        session.begin();
+        OkResponse.response(this);
+    }
+
     public void commit() {
+        session.commit();
         OkResponse.response(this);
     }
 
     public void rollBack() {
+        session.rollback();
         OkResponse.response(this);
     }
 
@@ -301,4 +310,11 @@ public class FrontendConnection {
         this.lastActiveTime = (new Date()).getTime();
     }
 
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
 }

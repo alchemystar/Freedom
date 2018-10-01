@@ -66,6 +66,14 @@ public class Table {
         }
     }
 
+    public void delete(IndexEntry entry) {
+        // 删除聚集索引
+        clusterIndex.delete(entry);
+        for (BaseIndex secondIndex : secondIndexes) {
+            secondIndex.delete(entry);
+        }
+    }
+
     public int getAttributeIndex(String name) {
         return attributesMap.get(name);
     }

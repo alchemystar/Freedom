@@ -18,6 +18,7 @@ import alchemystar.freedom.index.BaseIndex;
 import alchemystar.freedom.index.bp.BPTree;
 import alchemystar.freedom.meta.Attribute;
 import alchemystar.freedom.meta.Table;
+import alchemystar.freedom.meta.TableManager;
 import alchemystar.freedom.meta.value.Value;
 
 /**
@@ -33,6 +34,9 @@ public class CreateVisitor extends SQLASTVisitorAdapter {
         SQLTableSource sqlTableSource = x.getTableSource();
         if (!(sqlTableSource instanceof SQLExprTableSource)) {
             throw new RuntimeException("not support this table source " + sqlTableSource);
+        }
+        if (TableManager.getTableWithNoException(sqlTableSource.toString()) != null) {
+            throw new RuntimeException("table already exists");
         }
         table = new Table();
         table.setName((sqlTableSource).toString());

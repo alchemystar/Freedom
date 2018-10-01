@@ -27,22 +27,27 @@ public class SelectTest extends BasicSelectTest {
                     + ".id>=3 and a.id < 10 and "
                     + " b.id>=2 and b.id < 10 and c.id>=1 and c.id < 10 and a.name < 'alchemystar5'";
 
+    public static void main(String args[]){
+        System.out.println(joinSql);
+    }
+
+
     @Test
     public void selectSingleExecutor() {
         SqlExecutor sqlExecutor = new SqlExecutor();
-        sqlExecutor.execute(singleSql, null);
+        sqlExecutor.execute(singleSql, null, null);
     }
 
     @Test
     public void selectWildCardExecutor() {
         SqlExecutor sqlExecutor = new SqlExecutor();
-        sqlExecutor.execute(wildCardSql, null);
+        sqlExecutor.execute(wildCardSql, null, null);
     }
 
     @Test
     public void selectJoinExecutor() {
         SqlExecutor sqlExecutor = new SqlExecutor();
-        sqlExecutor.execute(joinSql, null);
+        sqlExecutor.execute(joinSql, null, null);
     }
 
     @Test

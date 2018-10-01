@@ -15,19 +15,19 @@ public class BasicSelectTest extends BasicGenTable {
     @Before
     public void init() {
         SqlExecutor executor = new SqlExecutor();
-        executor.execute(CreateTest.CREATE_SQL, null);
+        executor.execute(CreateTest.CREATE_SQL, null, null);
         insertSome();
     }
 
     private void insertSome() {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 50; i++) {
             String insertSql =
                     insertSqlTemplate.replaceFirst("\\?", String.valueOf(i)).replaceFirst("\\?", "'alchemystar" +
                             String
                                     .valueOf(i) + "'").replaceFirst("\\?", "'comment" + String.valueOf(i) + "'");
             System.out.println(insertSql);
             SqlExecutor sqlExecutor = new SqlExecutor();
-            sqlExecutor.execute(insertSql, null);
+            sqlExecutor.execute(insertSql, null, null);
         }
 
         System.out.println("insert okay");

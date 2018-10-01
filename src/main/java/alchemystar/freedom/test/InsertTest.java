@@ -28,7 +28,7 @@ public class InsertTest extends BasicGenTable {
                     .valueOf(i)
                     + "comment" + String.valueOf(i));
             SqlExecutor sqlExecutor = new SqlExecutor();
-            sqlExecutor.execute(insertSql, null);
+            sqlExecutor.execute(insertSql, null, null);
         }
 
         System.out.println("insert okay");

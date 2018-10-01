@@ -15,4 +15,11 @@ public class OkResponse {
         ChannelHandlerContext ctx = c.getCtx();
         okPacket.write(ctx);
     }
+
+    public static void responseWithAffectedRows(FrontendConnection c, long affectedRows) {
+        OkPacket okPacket = new OkPacket();
+        okPacket.affectedRows = affectedRows;
+        ChannelHandlerContext ctx = c.getCtx();
+        okPacket.write(ctx);
+    }
 }

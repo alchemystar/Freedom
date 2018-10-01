@@ -24,6 +24,8 @@ public class IndexEntry {
 
     protected IndexEntry compareEntry;
 
+    private boolean isAllNull;
+
     public IndexEntry() {
     }
 
@@ -42,6 +44,10 @@ public class IndexEntry {
             compareEntry.setIndexDesc(indexDesc);
         }
         return compareEntry;
+    }
+
+    public IndexEntry getDeleteCompareEntry() {
+        return this;
     }
 
     // 获取其byte
@@ -95,6 +101,10 @@ public class IndexEntry {
     public int compareIndex(IndexEntry indexEntry) {
         IndexEntry compareEntry = indexEntry.getCompareEntry();
         return innerCompare(compareEntry);
+    }
+
+    public int compareDeleteIndex(IndexEntry indexEntry) {
+        return innerCompare(indexEntry.getDeleteCompareEntry());
     }
 
     private int innerCompare(IndexEntry indexEntry) {
@@ -151,6 +161,14 @@ public class IndexEntry {
     public IndexEntry setValues(Value[] values) {
         this.values = values;
         return this;
+    }
+
+    public boolean isAllNull() {
+        return isAllNull;
+    }
+
+    public void setAllNull(boolean allNull) {
+        isAllNull = allNull;
     }
 
     public IndexDesc getIndexDesc() {
