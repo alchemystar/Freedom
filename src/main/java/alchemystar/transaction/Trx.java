@@ -3,10 +3,12 @@ package alchemystar.transaction;
 import java.util.ArrayList;
 import java.util.List;
 
+import alchemystar.freedom.engine.Database;
 import alchemystar.freedom.meta.ClusterIndexEntry;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.Table;
 import alchemystar.transaction.log.Log;
+import alchemystar.transaction.log.LogType;
 import alchemystar.transaction.undo.UndoManager;
 
 /**
@@ -26,12 +28,14 @@ public class Trx {
         state = TrxState.TRX_STATE_ACTIVE;
     }
 
+    // 都是Row模式下的add
     public void addLog(Table table, int opType, IndexEntry before, IndexEntry after) {
-        if (!(before == null || before instanceof ClusterIndexEntry) || !(after ==null || after instanceof
+        if (!(before == null || before instanceof ClusterIndexEntry) || !(after == null || after instanceof
                 ClusterIndexEntry)) {
             throw new RuntimeException("log before and after must be clusterIndexEntry");
         }
         Log log = new Log();
+        log.setLogType(LogType.ROW);
         log.setTrxId(trxId);
         log.setOpType(opType);
         log.setTableName(table.getName());
@@ -42,6 +46,15 @@ public class Trx {
     }
 
     public void commit() {
+        // logs 落盘
+        for (Log log : logs) {
+            Database.getInstance().getLogStore().appendLog(log);
+        }
+        // 加上commit日志
+        Log commitLog = new Log();
+        commitLog.setTrxId(trxId);
+        commitLog.setLogType(LogType.COMMIT);
+        Database.getInstance().getLogStore().appendLog(commitLog);
         state = TrxState.TRX_COMMITTED;
         // commit 之后无法使用undoLog
         logs.clear();
@@ -63,7 +76,8 @@ public class Trx {
     }
 
     private void undo() {
-        for (int i = 0; i < logs.size(); i++) {
+        // 反序undo
+        for (int i = logs.size() - 1; i >=0; i--) {
             UndoManager.undo(logs.get(i));
         }
     }

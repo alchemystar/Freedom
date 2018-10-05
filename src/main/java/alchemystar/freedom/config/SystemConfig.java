@@ -17,11 +17,11 @@ public interface SystemConfig {
 
     String RELATION_FILE_PRE_FIX = "/Users/alchemystar/var/freedom/";
 
-    String FREEDOM_REL_PATH = "/Users/alchemystar/var/freedom/t_freedom";
+    String FREEDOM_REL_DATA_PATH = RELATION_FILE_PRE_FIX + "/data";
 
-    String FREEDOM_REL_META_PATH = "/Users/alchemystar/var/freedom/t_freedom_meta";
+    String FREEDOM_REL_META_PATH = RELATION_FILE_PRE_FIX + "/meta";
 
-    String FREEDOM_LOG_FILE_NAME = "/Users/alchemystar/var/freedom/t_freedom_log";
+    String FREEDOM_LOG_FILE_NAME = RELATION_FILE_PRE_FIX + "/log/log";
 
     String Database = "";
     // 36小时内连接不发起请求就干掉 秒为单位

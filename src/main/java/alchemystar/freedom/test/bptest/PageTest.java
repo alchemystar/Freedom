@@ -43,7 +43,7 @@ public class PageTest {
                 break;
             }
         }
-        FStore fStore = new FStore(SystemConfig.FREEDOM_REL_PATH);
+        FStore fStore = new FStore(SystemConfig.FREEDOM_REL_DATA_PATH);
         fStore.open();
         fStore.writePageToFile(page, 0);
         fStore.writePageToFile(page, 10);

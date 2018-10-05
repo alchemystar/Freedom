@@ -20,7 +20,7 @@ public class CreateExecutor {
 
     public void execute() {
         init();
-        TableManager.addTable(createVisitor.getTable());
+        TableManager.addTable(createVisitor.getTable(), true);
     }
 
     public void init() {

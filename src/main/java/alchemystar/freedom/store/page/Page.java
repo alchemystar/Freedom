@@ -73,6 +73,13 @@ public class Page {
     }
 
     public void writeItems(List<Item> items) {
+        int sumSize = 0;
+        for (Item item : items) {
+            sumSize += item.getLength();
+        }
+        if (remainFreeSpace() < sumSize) {
+            throw new RuntimeException("data too long");
+        }
         for (Item item : items) {
             if (writeItem(item)) {
                 continue;

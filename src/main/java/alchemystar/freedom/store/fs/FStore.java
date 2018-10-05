@@ -10,6 +10,7 @@ import alchemystar.freedom.index.bp.BpPage;
 import alchemystar.freedom.store.page.Page;
 import alchemystar.freedom.store.page.PageLoader;
 import alchemystar.freedom.store.page.PagePool;
+import alchemystar.transaction.log.Log;
 
 /**
  * FStore
@@ -28,6 +29,7 @@ public class FStore {
     public FStore(String filePath) {
         this.filePath = filePath;
         currentFilePosition = 0;
+        open();
     }
 
     public void open() {
@@ -82,6 +84,10 @@ public class FStore {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void append(Log log) {
+        
     }
 
     public void close() {

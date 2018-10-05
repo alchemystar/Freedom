@@ -2,14 +2,19 @@ package alchemystar.freedom.meta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import alchemystar.freedom.access.Cursor;
+import alchemystar.freedom.config.SystemConfig;
 import alchemystar.freedom.index.BaseIndex;
 import alchemystar.freedom.index.Index;
+import alchemystar.freedom.meta.value.Value;
 import alchemystar.freedom.optimizer.Optimizer;
 import alchemystar.freedom.store.fs.FStore;
+import alchemystar.freedom.store.item.Item;
+import alchemystar.freedom.util.ValueConvertUtil;
 
 /**
  * Table
@@ -31,7 +36,7 @@ public class Table {
     private String metaPath;
     // 装载具体数据信息
     private FStore tableStore;
-    // 装载原信息
+    // 元信息store
     private FStore metaStore;
     // 主键索引,聚簇索引
     private BaseIndex clusterIndex;
@@ -99,6 +104,12 @@ public class Table {
 
     public void setName(String name) {
         this.name = name;
+        if (metaPath == null) {
+            metaPath = SystemConfig.FREEDOM_REL_META_PATH + "/" + name;
+        }
+        if (tablePath == null) {
+            tablePath = SystemConfig.FREEDOM_REL_DATA_PATH + "/" + name;
+        }
     }
 
     public BaseIndex getClusterIndex() {
@@ -130,10 +141,32 @@ public class Table {
         // 先不考虑持久化
     }
 
-    public void flushToDisk() {
+    public void flushDataToDisk() {
         clusterIndex.flushToDisk();
         for (BaseIndex baseIndex : secondIndexes) {
             baseIndex.flushToDisk();
         }
+    }
+
+    public List<Item> getItems() {
+        List<Item> list = new LinkedList<Item>();
+        for (Attribute attribute : attributes) {
+            Value[] values = ValueConvertUtil.convertAttr(attribute);
+            IndexEntry tuple = new IndexEntry(values);
+            Item item = new Item(tuple);
+            list.add(item);
+        }
+        return list;
+    }
+
+    public FStore getMetaStore() {
+        if (metaStore == null) {
+            metaStore = new FStore(metaPath);
+        }
+        return metaStore;
+    }
+
+    public void setMetaStore(FStore metaStore) {
+        this.metaStore = metaStore;
     }
 }

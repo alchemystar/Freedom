@@ -11,7 +11,7 @@ public class PageHeaderData {
     // todo 变的时候 需要同步更新这里
     public static final Integer PAGE_HEADER_SIZE = 24;
     // Page开头的magicWorld
-    private String magicWord = "Session";
+    private String magicWord = "Freedom";
     // free space的起始偏移
     private int lowerOffset;
     // 指向pageHeader中的lowerOffset起始位置
@@ -61,7 +61,7 @@ public class PageHeaderData {
     public void addTupleCount(Page page) {
         int count = page.readIntPos(TUPLE_COUNT_POINTER);
         count++;
-        // 修改tupe的数量
+        // 修改tuple的数量
         page.writeIntPos(count, TUPLE_COUNT_POINTER);
         tupleCount = count;
     }

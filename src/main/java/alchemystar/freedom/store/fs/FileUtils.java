@@ -63,11 +63,11 @@ public class FileUtils {
         } while (dst.remaining() > 0);
     }
 
-    public static void writeFully(FileChannel channel, ByteBuffer src) throws IOException {
+    public static void append(FileChannel channel, ByteBuffer src) throws IOException {
         do {
             // 追加数据
-            channel.position(channel.size());
             channel.write(src);
         } while (src.remaining() > 0);
     }
+
 }

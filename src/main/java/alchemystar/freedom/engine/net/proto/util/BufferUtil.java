@@ -6,6 +6,15 @@ import io.netty.buffer.ByteBuf;
  * @Author lizhuyang
  */
 public class BufferUtil {
+
+    public static final void writeByte(ByteBuf buffer, byte b) {
+        buffer.writeByte(b);
+    }
+
+    public static final void writeBytes(ByteBuf buffer, byte[] b) {
+        buffer.writeBytes(b);
+    }
+
     public static final void writeUB2(ByteBuf buffer, int i) {
         buffer.writeByte((byte) (i & 0xff));
         buffer.writeByte((byte) (i >>> 8));

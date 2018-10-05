@@ -18,7 +18,7 @@ public class InsertTest extends BasicGenTable {
     @Before
     public void init() {
         Table table = genTable();
-        TableManager.addTable(table);
+        TableManager.addTable(table, false);
     }
 
     @Test

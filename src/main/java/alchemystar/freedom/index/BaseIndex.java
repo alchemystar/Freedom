@@ -1,5 +1,8 @@
 package alchemystar.freedom.index;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import alchemystar.freedom.config.SystemConfig;
 import alchemystar.freedom.meta.Attribute;
 import alchemystar.freedom.meta.ClusterIndexEntry;
@@ -7,8 +10,12 @@ import alchemystar.freedom.meta.IndexDesc;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.Table;
 import alchemystar.freedom.meta.value.Value;
+import alchemystar.freedom.meta.value.ValueInt;
+import alchemystar.freedom.meta.value.ValueString;
 import alchemystar.freedom.store.fs.FStore;
+import alchemystar.freedom.store.item.Item;
 import alchemystar.freedom.store.page.PageNoAllocator;
+import alchemystar.freedom.util.ValueConvertUtil;
 
 /**
  * BaseIndex
@@ -147,5 +154,29 @@ public abstract class BaseIndex implements Index {
 
     public void setTable(Table table) {
         this.table = table;
+    }
+
+    public List<Item> getItems() {
+        List<Item> list = new LinkedList<Item>();
+        // 1 for name , attributes.length , 1 for isUnique , 1 for isPrimaryKey;
+        int itemSize = 1 + attributes.length + 1 + 1;
+        Item itemSizeItem = new Item(new IndexEntry(new Value[] {new ValueInt(itemSize)}));
+        Item itemName = new Item(new IndexEntry(new Value[] {new ValueString(indexName)}));
+        list.add(itemSizeItem);
+        list.add(itemName);
+        int isUnique = isUnique() ? 1 : 0;
+        int isPrimaryKey = isPrimaryKey() ? 1 : 0;
+        Item isUniqueItem = new Item(new IndexEntry(new Value[] {new ValueInt(isUnique)}));
+        Item isPrimaryKeyItem = new Item(new IndexEntry(new Value[] {new ValueInt(isPrimaryKey)}));
+        list.add(isUniqueItem);
+        list.add(isPrimaryKeyItem);
+        for (Attribute attribute : attributes) {
+            Value[] values = ValueConvertUtil.convertAttr(attribute);
+            IndexEntry tuple = new IndexEntry(values);
+            Item item = new Item(tuple);
+            list.add(item);
+        }
+
+        return list;
     }
 }
