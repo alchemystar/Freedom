@@ -15,7 +15,7 @@ import alchemystar.freedom.meta.value.ValueBoolean;
 import alchemystar.freedom.sql.parser.DeleteVisitor;
 import alchemystar.freedom.sql.select.TableFilter;
 import alchemystar.freedom.sql.select.item.SelectExprEval;
-import alchemystar.transaction.OpType;
+import alchemystar.freedom.transaction.OpType;
 
 /**
  * @Author lizhuyang
@@ -46,10 +46,11 @@ public class DeleteExecutor {
             }
         }
         for (IndexEntry delItem : toDelete) {
-            table.delete(delItem);
             if (session != null) {
                 session.addLog(table, OpType.delete, delItem, null);
             }
+            // 先落盘,再对table做操作
+            table.delete(delItem);
         }
         OkResponse.responseWithAffectedRows(con, toDelete.size());
     }

@@ -1,10 +1,10 @@
-package alchemystar.transaction.undo;
+package alchemystar.freedom.transaction.undo;
 
 import alchemystar.freedom.meta.Table;
 import alchemystar.freedom.meta.TableManager;
-import alchemystar.transaction.OpType;
-import alchemystar.transaction.log.Log;
-import alchemystar.transaction.log.LogType;
+import alchemystar.freedom.transaction.OpType;
+import alchemystar.freedom.transaction.log.Log;
+import alchemystar.freedom.transaction.log.LogType;
 
 /**
  * @Author lizhuyang

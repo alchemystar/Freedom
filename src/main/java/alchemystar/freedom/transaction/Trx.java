@@ -1,4 +1,4 @@
-package alchemystar.transaction;
+package alchemystar.freedom.transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,11 @@ import alchemystar.freedom.engine.Database;
 import alchemystar.freedom.meta.ClusterIndexEntry;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.Table;
-import alchemystar.transaction.log.Log;
-import alchemystar.transaction.log.LogType;
-import alchemystar.transaction.undo.UndoManager;
+import alchemystar.freedom.transaction.log.LSNFactory;
+import alchemystar.freedom.transaction.log.Log;
+import alchemystar.freedom.transaction.log.LogType;
+import alchemystar.freedom.transaction.redo.RedoManager;
+import alchemystar.freedom.transaction.undo.UndoManager;
 
 /**
  * 事务
@@ -25,7 +27,18 @@ public class Trx {
     private List<Log> logs = new ArrayList<Log>();
 
     public void begin() {
+        // 事务开启日志
+        Log startLog = new Log();
+        startLog.setLsn(LSNFactory.nextLSN());
+        startLog.setTrxId(trxId);
+        startLog.setLogType(LogType.TRX_START);
+        Database.getInstance().getLogStore().appendLog(startLog);
+        Database.getInstance().getLogStore().appendLog(startLog);
         state = TrxState.TRX_STATE_ACTIVE;
+    }
+
+    public void addLog(Log log) {
+        logs.add(log);
     }
 
     // 都是Row模式下的add
@@ -35,29 +48,39 @@ public class Trx {
             throw new RuntimeException("log before and after must be clusterIndexEntry");
         }
         Log log = new Log();
+        log.setLsn(LSNFactory.nextLSN());
         log.setLogType(LogType.ROW);
         log.setTrxId(trxId);
         log.setOpType(opType);
         log.setTableName(table.getName());
         log.setBefore(before);
         log.setAfter(after);
+        // log 落盘,不然在宕机的时候无法找到对应信息
+        Database.getInstance().getLogStore().appendLog(log);
+        // 这边的logs是为了在内存上加速undo
         logs.add(log);
 
     }
 
     public void commit() {
-        // logs 落盘
-        for (Log log : logs) {
-            Database.getInstance().getLogStore().appendLog(log);
-        }
         // 加上commit日志
         Log commitLog = new Log();
+        commitLog.setLsn(LSNFactory.nextLSN());
         commitLog.setTrxId(trxId);
         commitLog.setLogType(LogType.COMMIT);
         Database.getInstance().getLogStore().appendLog(commitLog);
         state = TrxState.TRX_COMMITTED;
         // commit 之后无法使用undoLog
         logs.clear();
+    }
+
+    // recovery
+    public void redo() {
+        for (Log log : logs) {
+            if (log.getLogType() == LogType.ROW) {
+                RedoManager.redo(log);
+            }
+        }
     }
 
     public void rollback() {
@@ -77,7 +100,7 @@ public class Trx {
 
     private void undo() {
         // 反序undo
-        for (int i = logs.size() - 1; i >=0; i--) {
+        for (int i = logs.size() - 1; i >= 0; i--) {
             UndoManager.undo(logs.get(i));
         }
     }

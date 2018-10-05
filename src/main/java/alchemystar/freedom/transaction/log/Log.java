@@ -1,4 +1,4 @@
-package alchemystar.transaction.log;
+package alchemystar.freedom.transaction.log;
 
 import alchemystar.freedom.meta.IndexEntry;
 import io.netty.buffer.ByteBuf;
@@ -7,6 +7,9 @@ import io.netty.buffer.ByteBuf;
  * @Author lizhuyang
  */
 public class Log {
+
+    // log的序列号,for 幂等
+    private long lsn;
 
     private int logType;
 
@@ -69,7 +72,17 @@ public class Log {
         this.logType = logType;
     }
 
+    public long getLsn() {
+        return lsn;
+    }
+
+    public void setLsn(long lsn) {
+        this.lsn = lsn;
+    }
+
     public void writeBytes(ByteBuf byteBuf) {
+        // for lsn
+        byteBuf.writeLong(lsn);
         // for logType
         byteBuf.writeInt(logType);
         // for trxId
@@ -95,7 +108,8 @@ public class Log {
     @Override
     public String toString() {
         return "Log{" +
-                "logType=" + logType +
+                "lsn=" + lsn +
+                ", logType=" + logType +
                 ", trxId=" + trxId +
                 ", tableName='" + tableName + '\'' +
                 ", opType=" + opType +
@@ -103,6 +117,7 @@ public class Log {
                 ", after=" + after +
                 '}';
     }
+
     //
     //    private int getEntryCount() {
     //        int count = 0;

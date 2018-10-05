@@ -4,8 +4,8 @@ import alchemystar.freedom.engine.net.handler.frontend.FrontendConnection;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.Table;
 import alchemystar.freedom.sql.SqlExecutor;
-import alchemystar.transaction.Trx;
-import alchemystar.transaction.TrxManager;
+import alchemystar.freedom.transaction.Trx;
+import alchemystar.freedom.transaction.TrxManager;
 
 /**
  * @Author lizhuyang

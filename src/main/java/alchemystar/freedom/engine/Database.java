@@ -1,6 +1,7 @@
 package alchemystar.freedom.engine;
 
 import alchemystar.freedom.meta.TableLoader;
+import alchemystar.freedom.recovery.RecoverManager;
 import alchemystar.freedom.store.log.LogStore;
 
 /**
@@ -24,7 +25,11 @@ public class Database {
         TableLoader tableLoader = new TableLoader();
         tableLoader.readAllTable();
         database.setTableLoader(tableLoader);
-        database.setLogStore(new LogStore());
+        LogStore logStore = new LogStore();
+        database.setLogStore(logStore);
+        RecoverManager recoverManager = new RecoverManager();
+        recoverManager.setLogStore(logStore);
+        recoverManager.recover();
     }
 
     public static Database getInstance() {

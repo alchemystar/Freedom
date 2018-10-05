@@ -9,7 +9,7 @@ import alchemystar.freedom.engine.session.SessionFactory;
 import alchemystar.freedom.sql.SqlExecutor;
 import alchemystar.freedom.store.log.LogStore;
 import alchemystar.freedom.test.sqltest.CreateTest;
-import alchemystar.transaction.log.Log;
+import alchemystar.freedom.transaction.log.Log;
 
 /**
  * @Author lizhuyang

@@ -9,12 +9,13 @@ import java.util.List;
 import alchemystar.freedom.config.SystemConfig;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.store.fs.FileUtils;
-import alchemystar.transaction.OpType;
-import alchemystar.transaction.log.Log;
-import alchemystar.transaction.log.LogType;
+import alchemystar.freedom.transaction.OpType;
+import alchemystar.freedom.transaction.log.Log;
+import alchemystar.freedom.transaction.log.LogType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
+
 
 /**
  * 文件路径
@@ -71,6 +72,8 @@ public class LogStore {
 
         while (byteBuf.readableBytes() > 0) {
             Log log = new Log();
+            // for lsn
+            log.setLsn(byteBuf.readLong());
             // logType
             log.setLogType(byteBuf.readInt());
             // trxId

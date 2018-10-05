@@ -10,7 +10,7 @@ import alchemystar.freedom.index.bp.BpPage;
 import alchemystar.freedom.store.page.Page;
 import alchemystar.freedom.store.page.PageLoader;
 import alchemystar.freedom.store.page.PagePool;
-import alchemystar.transaction.log.Log;
+import alchemystar.freedom.transaction.log.Log;
 
 /**
  * FStore
