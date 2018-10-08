@@ -20,8 +20,9 @@ public class RecoverManager {
 
     // 先简单的使用redo log 进行redo
     public void recover() {
-        // 首先由logStroe加载出所有的log
+        // 首先由logStore加载出所有的log
         List<Log> list = logStore.loadLog();
+        // 找出所有已经提交的事务
         List<Trx> trxList = getAllCommittedTrx(list);
         // 然后进行redo操作
         for (Trx trx : trxList) {
