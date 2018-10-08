@@ -12,6 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <app.encoding>UTF-8</app.encoding>
     </properties>
 
     <dependencies>
@@ -19,7 +20,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.11/version>
+            <version>1.1.11</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
