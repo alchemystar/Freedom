@@ -23,6 +23,7 @@ public class RecoverManager {
         // 首先由logStroe加载出所有的log
         List<Log> list = logStore.loadLog();
         List<Trx> trxList = getAllCommittedTrx(list);
+        // 然后进行redo操作
         for (Trx trx : trxList) {
             trx.redo();
         }

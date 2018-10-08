@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f61322d4-2b74-42c6-9478-5612560e5c89" name="Default" comment="" />
+    <list default="true" id="f61322d4-2b74-42c6-9478-5612560e5c89" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java" afterPath="$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java" />
+    </list>
     <ignored path="Freedom.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -80,25 +82,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RecoverManager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="RecoverManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.8108108">
+              <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#891#905#0" expanded="true" />
+                <element signature="e#913#927#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BaseIndex.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/index/BaseIndex.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5135135">
-              <caret line="70" column="13" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -181,8 +173,8 @@
         <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/transaction/TrxManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/Database.java" />
         <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/transaction/Trx.java" />
-        <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java" />
         <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/transaction/redo/RedoManager.java" />
+        <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java" />
       </list>
     </option>
   </component>
@@ -197,7 +189,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="1" />
-    <option name="y" value="24" />
+    <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="731" />
   </component>
@@ -991,10 +983,10 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Application.FreedomServer" />
-        <item index="1" class="java.lang.String" itemvalue="JUnit.LogTest.testRead" />
-        <item index="2" class="java.lang.String" itemvalue="JUnit.LogTest.testWrite" />
-        <item index="3" class="java.lang.String" itemvalue="JUnit.LogTest.init" />
-        <item index="4" class="java.lang.String" itemvalue="JUnit.LogTest.insertSome" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.LogTest.insertSome" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.LogTest.testRead" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.LogTest.testWrite" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.LogTest.init" />
       </list>
     </recent_temporary>
   </component>
@@ -1012,8 +1004,8 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="LogTest_testRead - 2018.10.05 at 11h 09m 34s.xml">
-      <configuration name="LogTest.testRead" configurationId="JUnit" />
+    <history-entry file="LogTest_insertSome - 2018.10.05 at 16h 04m 38s.xml">
+      <configuration name="LogTest.insertSome" configurationId="JUnit" />
     </history-entry>
     <history-entry file="LogTest_testRead - 2018.10.05 at 11h 10m 00s.xml">
       <configuration name="LogTest.testRead" configurationId="JUnit" />
@@ -1044,7 +1036,7 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="24" width="1280" height="731" extended-state="6" />
+    <frame x="1" y="23" width="1280" height="731" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="PlantUML" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1528,17 +1520,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="0" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#891#905#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/transaction/redo/RedoManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1551,9 +1532,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/index/BaseIndex.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5135135">
-          <caret line="70" column="13" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
+        <state vertical-scroll-proportion="0.7387387">
+          <caret line="75" column="13" selection-start-line="75" selection-start-column="13" selection-end-line="75" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/recovery/RecoverManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8108108">
+          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#913#927#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
