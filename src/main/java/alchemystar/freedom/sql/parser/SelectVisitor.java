@@ -48,6 +48,8 @@ public class SelectVisitor extends SQLASTVisitorAdapter {
                     SQLPropertyExpr sqlPropertyExpr = (SQLPropertyExpr) sqlSelectItem.getExpr();
                     if (sqlPropertyExpr.getSimpleName().equals("*")) {
                         handleOneWildCard(sqlSelectItem);
+                    } else {
+                        selectItems.add(sqlSelectItem);
                     }
                 } else {
                     selectItems.add(sqlSelectItem);
