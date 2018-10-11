@@ -49,7 +49,7 @@ public class FreedomServer extends Thread {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try {
-            // Rider Server
+            // Freedom Server
             Database database = Database.getInstance();
             ServerBootstrap b = new ServerBootstrap();
             // 这边的childHandler是用来管理accept的
