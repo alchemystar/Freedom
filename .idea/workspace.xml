@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee0a0092-c184-49a4-bafc-5f711a922a02" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/alchemystar/freedom/test/sqltest/DeleteTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/alchemystar/freedom/test/sqltest/DeleteTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/server/FreedomServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/server/FreedomServer.java" afterDir="false" />
     </list>
-    <ignored path="freedom.iws" />
-    <ignored path=".idea/workspace.xml" />
-    <ignored path="$PROJECT_DIR$/target/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -58,86 +54,11 @@
     <ui_properties converted="true" />
     <breakpoint_rules converted="true" />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-1701184753">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="1" />
-          <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="1" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="java" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="JAVA" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="java" value="206" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="JAVA" value="206" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.spring.boot.mvc.usages" />
-      <usages-collector id="statistics.spring.boot.run.usages" />
-      <usages-collector id="statistics.vcs.git.usages" />
-      <usages-collector id="statistics.js.language.service.starts" />
-    </session>
-  </component>
   <component name="FavoritesManager">
     <favorites_list name="freedom" />
   </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/alchemystar/AppTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="24" column="7" lean-forward="true" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/test/sqltest/DeleteTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GradleLocalSettings">
-    <option name="modificationStamps">
-      <map>
-        <entry key="$USER_HOME$/gitsource/databus" value="64339835208000" />
-        <entry key="$USER_HOME$/gitsource/geode" value="34317787851000" />
-        <entry key="$USER_HOME$/gitsource/spring/spring-framework-4.3.0.RELEASE" value="5862196692000" />
-      </map>
-    </option>
-  </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/pom.xml" />
-        <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/server/FreedomServer.java" />
-        <option value="$PROJECT_DIR$/src/main/java/alchemystar/freedom/test/sqltest/DeleteTest.java" />
-      </list>
-    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -152,96 +73,11 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="729" />
-  </component>
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="freedom" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="sqltest" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="freedom" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Freedom" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="alchemystar" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
+  <component name="ProjectId" id="1XQ0nxg5PcmRHsVRYna8NMU08p8" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="GoToClass.includeLibraries" value="false" />
@@ -250,31 +86,18 @@
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="SearchEverywhereHistoryKey" value="Freed&#9;PSI&#9;JAVA://alchemystar.freedom.engine.server.FreedomServer" />
+    <property name="SearchEverywhereHistoryKey" value="Show&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/response/ShowTables.java&#10;Select&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/handler/frontend/SelectHandler.java&#10;ServerPar&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/parser/ServerParseShow.java&#10;ShowTab&#9;PSI&#9;JAVA://alchemystar.freedom.engine.net.response.ShowTables&#10;ROW&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/mysql/RowDataPacket.java&#10;auth&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/mysql/AuthPacket.java&#10;My&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/codec/MySqlPacketDecoder.java&#10;ServerQuery&#9;PSI&#9;JAVA://alchemystar.freedom.engine.net.handler.frontend.ServerQueryHandler&#10;OkP&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/mysql/OkPacket.java&#10;Ser&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/server/FreedomServer.java&#10;handShake&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/mysql/HandshakePacket.java&#10;HandS&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/mysql/HandshakePacket.java&#10;InputSt&#9;FILE&#9;jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/io/InputStream.java&#10;SocketInput&#9;PSI&#9;JAVA://java.net.SocketInputStream&#10;InputStream&#9;PSI&#9;JAVA://java.io.InputStream&#10;MySQLP&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/MySQLPacket.java&#10;Syste&#9;PSI&#9;JAVA://alchemystar.freedom.config.SystemConfig&#10;Server&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/server/FreedomServer.java&#10;ResultSet&#9;FILE&#9;file:///Users/alchemystar/mycode/Freedom/src/main/java/alchemystar/freedom/engine/net/proto/mysql/ResultSetHeaderPacket.java&#10;Freed&#9;PSI&#9;JAVA://alchemystar.freedom.engine.server.FreedomServer" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542348050222" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1574677333886" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/pom.xml" />
     <property name="options.lastSelected" value="preferences.sourceCode.General" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="settings.editor.selected.configurable" value="copyright.profiles" />
-    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Language Defaults" />
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="JUnit.DeleteTest.test2">
+  <component name="RunManager" selected="Application.FreedomServer">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android Application">
       <module name="" />
       <option name="ACTIVITY_CLASS" value="" />
@@ -334,6 +157,12 @@
       <option name="CLOUD_DEVICE_SERIAL_NUMBER" value="" />
       <method />
     </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JUnitTestDiscovery" factoryName="JUnit Test Discovery" changeList="All">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="" />
@@ -383,12 +212,6 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="FreedomServer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="alchemystar.freedom.engine.server.FreedomServer" />
       <module name="freedom" />
@@ -427,12 +250,14 @@
       </method>
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">
+      <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="TestNG" factoryName="TestNG">
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <properties />
       <listeners />
@@ -440,11 +265,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
       <option name="PROGRAM_PARAMETERS" />
-      <predefined_log_file id="idea.log" enabled="true" />
+      <predefined_log_file enabled="true" id="idea.log" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -455,10 +280,22 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.DeleteTest.test2" />
         <item itemvalue="Application.FreedomServer" />
+        <item itemvalue="JUnit.DeleteTest.test2" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -471,65 +308,20 @@
       <option name="presentableId" value="Default" />
       <updated>1538988922126</updated>
       <workItem from="1542272991473" duration="2977000" />
+      <workItem from="1543201670353" duration="5944000" />
+      <workItem from="1543288559039" duration="16444000" />
+      <workItem from="1543543073493" duration="28248000" />
+      <workItem from="1544090255936" duration="544000" />
+      <workItem from="1562119938386" duration="3948000" />
+      <workItem from="1563433485184" duration="28000" />
+      <workItem from="1568791967113" duration="908000" />
+      <workItem from="1568793062574" duration="701000" />
+      <workItem from="1574675872013" duration="1532000" />
     </task>
     <servers />
   </component>
-  <component name="TestHistory">
-    <history-entry file="DeleteTest_test2 - 2018.11.15 at 17h 13m 05s.xml">
-      <configuration name="DeleteTest.test2" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="DeleteTest_test2 - 2018.11.15 at 17h 13m 12s.xml">
-      <configuration name="DeleteTest.test2" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="DeleteTest_test2 - 2018.11.15 at 17h 15m 18s.xml">
-      <configuration name="DeleteTest.test2" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="DeleteTest_test2 - 2018.11.15 at 17h 31m 48s.xml">
-      <configuration name="DeleteTest.test2" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="DeleteTest_test2 - 2018.11.15 at 17h 42m 10s.xml">
-      <configuration name="DeleteTest.test2" configurationId="JUnit" />
-    </history-entry>
-  </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2977000" />
-  </component>
-  <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="729" extended-state="0" />
-    <editor active="true" />
-    <layout>
-      <window_info id="Image Layers" />
-      <window_info id="Capture Tool" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2536349" />
-      <window_info id="Structure" order="1" weight="0.25" />
-      <window_info id="Palette&#9;" order="2" />
-      <window_info id="UI Designer" order="3" />
-      <window_info id="Favorites" order="4" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.3274596" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32810047" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39906102" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Tool Output" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="ANTLR Preview" order="11" />
-      <window_info anchor="bottom" id="Messages" order="12" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="right" id="Database" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="PlantUML" order="3" />
-      <window_info anchor="right" id="Palette" order="4" />
-      <window_info anchor="right" id="Maven Projects" order="5" />
-      <window_info anchor="right" id="Designer" order="6" />
-    </layout>
+    <option name="totallyTimeSpent" value="61274000" />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -542,111 +334,93 @@
       <collection />
     </option>
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="WindowStateProjectService">
+    <state x="49" y="123" width="1080" height="577" key="DiffContextDialog" timestamp="1589956532581">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="49" y="123" width="1080" height="577" key="DiffContextDialog/0.23.1280.777@0.23.1280.777" timestamp="1589956532581" />
+    <state width="1238" height="299" key="GridCell.Tab.0.bottom" timestamp="1587866748455">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.0.bottom/0.23.1280.730@0.23.1280.730" timestamp="1587866748455" />
+    <state width="1238" height="299" key="GridCell.Tab.0.bottom/0.23.1280.732@0.23.1280.732" timestamp="1587693392899" />
+    <state width="1238" height="299" key="GridCell.Tab.0.center" timestamp="1587866748455">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.0.center/0.23.1280.730@0.23.1280.730" timestamp="1587866748455" />
+    <state width="1238" height="299" key="GridCell.Tab.0.center/0.23.1280.732@0.23.1280.732" timestamp="1587693392898" />
+    <state width="1238" height="299" key="GridCell.Tab.0.left" timestamp="1587866748454">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.0.left/0.23.1280.730@0.23.1280.730" timestamp="1587866748454" />
+    <state width="1238" height="299" key="GridCell.Tab.0.left/0.23.1280.732@0.23.1280.732" timestamp="1587693392898" />
+    <state width="1238" height="299" key="GridCell.Tab.0.right" timestamp="1587866748455">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.0.right/0.23.1280.730@0.23.1280.730" timestamp="1587866748455" />
+    <state width="1238" height="299" key="GridCell.Tab.0.right/0.23.1280.732@0.23.1280.732" timestamp="1587693392899" />
+    <state width="1238" height="299" key="GridCell.Tab.1.bottom" timestamp="1587866748456">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.1.bottom/0.23.1280.730@0.23.1280.730" timestamp="1587866748456" />
+    <state width="1238" height="299" key="GridCell.Tab.1.bottom/0.23.1280.732@0.23.1280.732" timestamp="1587693392901" />
+    <state width="1238" height="299" key="GridCell.Tab.1.center" timestamp="1587866748456">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.1.center/0.23.1280.730@0.23.1280.730" timestamp="1587866748456" />
+    <state width="1238" height="299" key="GridCell.Tab.1.center/0.23.1280.732@0.23.1280.732" timestamp="1587693392901" />
+    <state width="1238" height="299" key="GridCell.Tab.1.left" timestamp="1587866748456">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.1.left/0.23.1280.730@0.23.1280.730" timestamp="1587866748456" />
+    <state width="1238" height="299" key="GridCell.Tab.1.left/0.23.1280.732@0.23.1280.732" timestamp="1587693392899" />
+    <state width="1238" height="299" key="GridCell.Tab.1.right" timestamp="1587866748456">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state width="1238" height="299" key="GridCell.Tab.1.right/0.23.1280.730@0.23.1280.730" timestamp="1587866748456" />
+    <state width="1238" height="299" key="GridCell.Tab.1.right/0.23.1280.732@0.23.1280.732" timestamp="1587693392901" />
+    <state x="0" y="78" key="SettingsEditor" timestamp="1589882940186">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="0" y="78" key="SettingsEditor/0.23.1280.777@0.23.1280.777" timestamp="1589882940186" />
+    <state x="319" y="233" key="com.intellij.ide.util.TipDialog" timestamp="1589166050771">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="319" y="220" key="com.intellij.ide.util.TipDialog/0.23.1280.730@0.23.1280.730" timestamp="1587880300897" />
+    <state x="319" y="233" key="com.intellij.ide.util.TipDialog/0.23.1280.777@0.23.1280.777" timestamp="1589166050771" />
+    <state x="313" y="205" width="683" height="476" key="find.popup" timestamp="1589956621670">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="313" y="205" width="683" height="476" key="find.popup/0.23.1280.777@0.23.1280.777" timestamp="1589956621670" />
+    <state x="0" y="23" key="new project wizard" timestamp="1588059284449">
+      <screen x="0" y="23" width="1280" height="730" />
+    </state>
+    <state x="0" y="23" key="new project wizard/0.23.1280.730@0.23.1280.730" timestamp="1588059284449" />
+    <state x="245" y="174" key="run.anything.popup" timestamp="1589794946398">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="245" y="174" key="run.anything.popup/0.23.1280.777@0.23.1280.777" timestamp="1589794946398" />
+    <state x="320" y="124" width="670" height="676" key="search.everywhere.popup" timestamp="1589956506516">
+      <screen x="0" y="23" width="1280" height="777" />
+    </state>
+    <state x="320" y="124" width="670" height="676" key="search.everywhere.popup/0.23.1280.777@0.23.1280.777" timestamp="1589956506516" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home/src.zip!/java/lang/Runtime.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="634" column="22" selection-start-line="634" selection-start-column="22" selection-end-line="634" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/io/netty/netty-all/5.0.0.Alpha1/netty-all-5.0.0.Alpha1-sources.jar!/io/netty/channel/MultithreadEventLoopGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="39" column="91" selection-start-line="39" selection-start-column="45" selection-end-line="39" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/io/netty/netty-all/5.0.0.Alpha1/netty-all-5.0.0.Alpha1-sources.jar!/io/netty/channel/nio/NioEventLoopGroup.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="71" column="11" selection-start-line="71" selection-start-column="11" selection-end-line="71" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="33" selection-start-line="33" selection-end-line="38" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/config/SocketConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="16" selection-start-line="16" selection-end-line="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/server/FreedomServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="59" column="47" selection-start-line="59" selection-start-column="47" selection-end-line="59" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/config/SystemConfig.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/net/handler/frontend/FrontendConnection.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="28" column="2" selection-start-line="28" selection-start-column="2" selection-end-line="28" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/io/netty/netty-all/5.0.0.Alpha1/netty-all-5.0.0.Alpha1-sources.jar!/io/netty/handler/codec/ByteToMessageDecoder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="47" column="22" selection-start-line="47" selection-start-column="22" selection-end-line="47" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/net/handler/factory/FrontHandlerFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="29" column="24" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/net/codec/MySqlPacketDecoder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="18" column="45" selection-start-line="18" selection-start-column="45" selection-end-line="18" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/engine/net/handler/frontend/FrontendGroupHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="15" column="63" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/alchemystar/AppTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="24" column="7" lean-forward="true" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/alchemystar/freedom/test/sqltest/DeleteTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>b[i-1]</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>b[i]</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
 </project>

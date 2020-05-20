@@ -29,7 +29,11 @@ public class FreedomServer extends Thread {
         try {
             server.start();
             while (true) {
-                Thread.sleep(1000 * 300);
+                try {
+                    Thread.sleep(1000 * 300);
+                }catch (Exception e){
+                    // just ignore it
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
