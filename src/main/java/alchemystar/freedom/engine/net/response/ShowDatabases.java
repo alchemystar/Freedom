@@ -20,12 +20,7 @@ import io.netty.channel.ChannelHandlerContext;
  *
  * @Author lizhuyang
  */
-public final class ShowDatabases {
-
-    private static final int FIELD_COUNT = 1;
-    private static final ResultSetHeaderPacket header = PacketUtil.getHeader(FIELD_COUNT);
-    private static final FieldPacket[] fields = new FieldPacket[FIELD_COUNT];
-    private static final EOFPacket eof = new EOFPacket();
+public final class ShowDatabases extends BaseSchema {
 
     static {
         int i = 0;
