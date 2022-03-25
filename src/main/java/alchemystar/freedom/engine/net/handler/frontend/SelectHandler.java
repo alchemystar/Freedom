@@ -4,7 +4,7 @@ import alchemystar.freedom.engine.net.response.SelectDatabase;
 import alchemystar.freedom.engine.net.response.SelectVersion;
 import alchemystar.freedom.engine.net.response.SelectVersionComment;
 import alchemystar.freedom.engine.net.response.jdbc.SelectIncrementResponse;
-import alchemystar.freedom.engine.parser.ServerParse;
+import alchemystar.freedom.engine.parser.ServerParseCheck;
 import alchemystar.freedom.engine.parser.ServerParseSelect;
 
 /**
@@ -32,7 +32,7 @@ public final class SelectHandler {
                 if (selectIncrement.equals(stmt)) {
                     SelectIncrementResponse.response(c);
                 } else {
-                    c.execute(stmt, ServerParse.SELECT);
+                    c.execute(stmt, ServerParseCheck.SELECT);
                 }
                 break;
         }

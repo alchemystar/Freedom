@@ -78,15 +78,15 @@ public class BPTree extends BaseIndex {
 
     @Override
     public Cursor searchEqual(IndexEntry key) {
-        Position startPos = getFirst(key, CompareType.EQUAL);
-        if (startPos == null) {
+        Position startPosition = getFirst(key, CompareType.EQUAL);
+        if (startPosition == null) {
             return null;
         }
-        startPos.setSearchEntry(key);
+        startPosition.setSearchEntry(key);
         if (isPrimaryKey) {
-            return new ClusterIndexCursor(startPos, null, true);
+            return new ClusterIndexCursor(startPosition, null, true);
         } else {
-            SecondIndexCursor cursor = new SecondIndexCursor(startPos, null, true);
+            SecondIndexCursor cursor = new SecondIndexCursor(startPosition, null, true);
             cursor.setClusterIndex(table.getClusterIndex());
             return cursor;
         }
@@ -94,24 +94,24 @@ public class BPTree extends BaseIndex {
 
     @Override
     public Cursor searchRange(IndexEntry lowKey, IndexEntry upKey) {
-        Position startPos = getFirst(lowKey, CompareType.LOW);
-        if (startPos == null) {
+        Position startPosition = getFirst(lowKey, CompareType.LOW);
+        if (startPosition == null) {
             return null;
         }
-        Position endPos = null;
+        Position endPosition = null;
         if (upKey != null) {
-            startPos.setSearchEntry(lowKey);
+            startPosition.setSearchEntry(lowKey);
             if (upKey != null) {
-                endPos = getLast(upKey, CompareType.UP);
+                endPosition = getLast(upKey, CompareType.UP);
             }
-            if (endPos != null) {
-                endPos.setSearchEntry(upKey);
+            if (endPosition != null) {
+                endPosition.setSearchEntry(upKey);
             }
         }
         if (isPrimaryKey) {
-            return new ClusterIndexCursor(startPos, endPos, false);
+            return new ClusterIndexCursor(startPosition, endPosition, false);
         } else {
-            SecondIndexCursor cursor = new SecondIndexCursor(startPos, endPos, false);
+            SecondIndexCursor cursor = new SecondIndexCursor(startPosition, endPosition, false);
             cursor.setClusterIndex(table.getClusterIndex());
             return cursor;
         }
