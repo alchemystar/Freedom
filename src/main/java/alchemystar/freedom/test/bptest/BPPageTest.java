@@ -103,7 +103,7 @@ public class BPPageTest {
             System.out.println("B+Tree Error");
         }
 
-        double spaceRate = bpNode.getBpPage().getContentSize() * 1.0 / bpNode.getBpPage().getInitFreeSpace();
+        double spaceRate = bpNode.getBpPage().bpNode.getContentSize() * 1.0 / bpNode.getBpPage().getInitFreeSpace();
         //  System.out.println("node space rate=" + spaceRate);
 
         if (!bpNode.isLeaf()) {

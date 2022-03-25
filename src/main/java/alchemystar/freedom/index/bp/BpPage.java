@@ -5,7 +5,6 @@ import alchemystar.freedom.constant.ItemConst;
 import alchemystar.freedom.meta.IndexEntry;
 import alchemystar.freedom.meta.value.Value;
 import alchemystar.freedom.meta.value.ValueInt;
-import alchemystar.freedom.store.item.Item;
 import alchemystar.freedom.store.page.Page;
 import alchemystar.freedom.store.page.PageHeaderData;
 import alchemystar.freedom.store.page.PageLoader;
@@ -29,7 +28,7 @@ import alchemystar.freedom.store.page.PageLoader;
  */
 public class BpPage extends Page {
 
-    private BPNode bpNode;
+    public BPNode bpNode;
 
     private int leafInitFreeSpace;
 
@@ -140,21 +139,8 @@ public class BpPage extends Page {
         }
     }
 
-    public int getContentSize() {
-        int size = 0;
-        for (IndexEntry key : bpNode.getEntries()) {
-            size += Item.getItemLength(key);
-        }
-        if (!bpNode.isLeaf()) {
-            for (int i = 0; i < bpNode.getChildren().size(); i++) {
-                size += ItemConst.INT_LEANGTH;
-            }
-        }
-        return size;
-    }
-
     public int cacluateRemainFreeSpace() {
-        return getInitFreeSpace() - getContentSize();
+        return getInitFreeSpace() - bpNode.getContentSize();
     }
 
     public int getInitFreeSpace() {

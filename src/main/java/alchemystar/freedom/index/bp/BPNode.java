@@ -331,7 +331,7 @@ public class BPNode {
 
     // 删除节点后的中间节点更新
     protected void updateRemove(BPTree tree) {
-        if (children.size() < 2 || bpPage.getContentSize() < bpPage.getInitFreeSpace() / 2) {
+        if (children.size() < 2 || bpPage.bpNode.getContentSize() < bpPage.getInitFreeSpace() / 2) {
             if (isRoot) {
                 // 根节点并且子节点树>=2 , 直接return
                 if (children.size() >= 2) {
@@ -391,7 +391,7 @@ public class BPNode {
                 // 这边不会出现entries是0的情况,如果entries是0,会在前面的borrow节点给borrow掉,不会到达这里
                 parent.updateRemove(tree);
             }
-        } else if (this.bpPage.getContentSize() > this.bpPage.getInitFreeSpace()) {
+        } else if (this.bpPage.bpNode.getContentSize() > this.bpPage.getInitFreeSpace()) {
             // now this way show split
             // 因为在更新的时候,由于key值大小不定,可能导致虽然删除了关键字,但是由于
             // 更新了新的长的key,导致比删除之前的size还要大,所以就有可能导致分裂
@@ -739,7 +739,7 @@ public class BPNode {
     }
 
     public boolean canRemoveDirect(IndexEntry key) {
-        if ((bpPage.getContentSize() - Item.getItemLength(key)) > bpPage.getInitFreeSpace() / 2) {
+        if ((bpPage.bpNode.getContentSize() - Item.getItemLength(key)) > bpPage.getInitFreeSpace() / 2) {
             return true;
         }
         return false;
@@ -749,7 +749,7 @@ public class BPNode {
         if (previous != null && previous.getEntries().size() > 2 && previous.getParent() == parent) {
             IndexEntry borrowKey = previous.getEntries().get(previous.getEntries().size() - 1);
             int borrowKeyLength = getBorrowKeyLength(borrowKey);
-            if ((previous.bpPage.getContentSize() - borrowKeyLength > previous.bpPage.getInitFreeSpace() / 2)) {
+            if ((previous.bpPage.bpNode.getContentSize() - borrowKeyLength > previous.bpPage.getInitFreeSpace() / 2)) {
                 return true;
             }
             // 即将删除到0,所以需要borrow
@@ -764,7 +764,7 @@ public class BPNode {
         if (next != null && next.getEntries().size() > 2 && next.getParent() == parent) {
             IndexEntry borrowKey = next.getEntries().get(0);
             int borrowKeyLength = getBorrowKeyLength(borrowKey);
-            if ((next.bpPage.getContentSize() - borrowKeyLength > next.bpPage.getInitFreeSpace() / 2)) {
+            if ((next.bpPage.bpNode.getContentSize() - borrowKeyLength > next.bpPage.getInitFreeSpace() / 2)) {
                 return true;
             }
             // 即将删除到0,所以需要borrow
@@ -797,7 +797,7 @@ public class BPNode {
         int borrowKeyLength = getBorrowKeyLength(key);
         if (bpNode.getParent() == parent &&
                 bpNode.getEntries().size() >= 2 &&
-                bpNode.bpPage.getContentSize() - borrowKeyLength > bpNode.bpPage.getInitFreeSpace() / 2 &&
+                bpNode.bpPage.bpNode.getContentSize() - borrowKeyLength > bpNode.bpPage.getInitFreeSpace() / 2 &&
                 borrowKeyLength <= this.bpPage.cacluateRemainFreeSpace()) {
             return true;
         } else if (this.entries.size() == 0 && bpNode.getEntries().size() >= 2) {
@@ -816,8 +816,7 @@ public class BPNode {
             return false;
         }
         // 加上contentSize<space/2这个条件,是为了防止频繁的合并分裂节点
-        if (bpNode != null && bpNode.bpPage.getContentSize() < bpNode.bpPage.getInitFreeSpace() / 2 && bpNode.bpPage
-                .getContentSize() <= bpPage.cacluateRemainFreeSpace()
+        if (bpNode != null && bpNode.bpPage.bpNode.getContentSize() < bpNode.bpPage.getInitFreeSpace() / 2 && bpNode.bpPage.bpNode.getContentSize() <= bpPage.cacluateRemainFreeSpace()
                 && bpNode.getParent() == parent) {
             return true;
         }
@@ -836,7 +835,7 @@ public class BPNode {
                 IndexEntry downKey = this.getParent().getEntries().get(parentIdx);
                 adjutSize = Item.getItemLength(downKey);
             }
-            if (bpNode.bpPage.getContentSize() + adjutSize <= bpPage.cacluateRemainFreeSpace()) {
+            if (bpNode.bpPage.bpNode.getContentSize() + adjutSize <= bpPage.cacluateRemainFreeSpace()) {
                 return true;
             }
         }
@@ -855,7 +854,7 @@ public class BPNode {
                 IndexEntry downKey = this.getParent().getEntries().get(parentIdx);
                 adjutSize = Item.getItemLength(downKey);
             }
-            if (bpNode.bpPage.getContentSize() + adjutSize <= bpPage.cacluateRemainFreeSpace()) {
+            if (bpNode.bpPage.bpNode.getContentSize() + adjutSize <= bpPage.cacluateRemainFreeSpace()) {
                 return true;
             }
         }
@@ -913,6 +912,19 @@ public class BPNode {
     public BPNode setBpTree(BPTree bpTree) {
         this.bpTree = bpTree;
         return this;
+    }
+
+    public int getContentSize() {
+        int size = 0;
+        for (IndexEntry key : getEntries()) {
+            size += Item.getItemLength(key);
+        }
+        if (!isLeaf()) {
+            for (int i = 0; i < getChildren().size(); i++) {
+                size += ItemConst.INT_LEANGTH;
+            }
+        }
+        return size;
     }
 }
 
