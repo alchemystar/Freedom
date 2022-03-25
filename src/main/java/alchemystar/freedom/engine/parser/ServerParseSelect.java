@@ -259,15 +259,22 @@ public class ServerParseSelect {
      */
     public static int skipAs(String stmt, int offset) {
         offset = ParseUtil.move(stmt, offset, 0);
-        if (stmt.length() > offset + "AS".length()
-                && (stmt.charAt(offset) == 'A' || stmt.charAt(offset) == 'a')
-                && (stmt.charAt(offset + 1) == 'S' || stmt.charAt(offset + 1) == 's')
-                && (stmt.charAt(offset + 2) == ' ' || stmt.charAt(offset + 2) == '\r'
-                            || stmt.charAt(offset + 2) == '\n' || stmt.charAt(offset + 2) == '\t'
-                            || stmt.charAt(offset + 2) == '/' || stmt.charAt(offset + 2) == '#')) {
+        if (checkASPart(stmt, offset) && checkSpacePart(stmt, offset)) {
             offset = ParseUtil.move(stmt, offset + 2, 0);
         }
         return offset;
+    }
+
+    public static boolean checkASPart(String stmt, int offset) {
+        return stmt.length() > offset + "AS".length()
+                && (stmt.charAt(offset) == 'A' || stmt.charAt(offset) == 'a')
+                && (stmt.charAt(offset + 1) == 'S' || stmt.charAt(offset + 1) == 's');
+    }
+
+    public static boolean checkSpacePart(String stmt, int offset) {
+        return stmt.charAt(offset + 2) == ' ' || stmt.charAt(offset + 2) == '\r'
+                || stmt.charAt(offset + 2) == '\n' || stmt.charAt(offset + 2) == '\t'
+                || stmt.charAt(offset + 2) == '/' || stmt.charAt(offset + 2) == '#';
     }
 
     /**
