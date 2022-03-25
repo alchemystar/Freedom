@@ -1,7 +1,7 @@
 package alchemystar.freedom.engine.net.handler.frontend;
 
 import alchemystar.freedom.engine.net.proto.util.ErrorCode;
-import alchemystar.freedom.engine.parser.ServerParse;
+import alchemystar.freedom.engine.parser.ServerParseCheck;
 import alchemystar.freedom.engine.parser.ServerParseStart;
 
 /**
@@ -18,7 +18,7 @@ public final class StartHandler {
                 break;
             default:
                 // todo data source
-                  c.execute(stmt, ServerParse.START);
+                  c.execute(stmt, ServerParseCheck.START);
                 break;
         }
     }

@@ -1,5 +1,6 @@
 package alchemystar.freedom.engine.net.handler.frontend;
 
+import alchemystar.freedom.engine.parser.ServerParseCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,43 +28,43 @@ public class ServerQueryHandler implements FrontendQueryHandler {
         String sql = removeFirstAnnotation(origin);
         int rs = ServerParse.parse(sql);
         switch (rs & 0xff) {
-            case ServerParse.SET:
+            case ServerParseCheck.SET:
                 SetHandler.handle(sql, source, rs >>> 8);
                 break;
-            case ServerParse.SHOW:
+            case ServerParseCheck.SHOW:
                 ShowHandler.handle(sql, source, rs >>> 8);
                 break;
-            case ServerParse.SELECT:
+            case ServerParseCheck.SELECT:
                 SelectHandler.handle(sql, source, rs >>> 8);
                 break;
-            case ServerParse.START:
+            case ServerParseCheck.START:
                 StartHandler.handle(sql, source, rs >>> 8);
                 break;
-            case ServerParse.BEGIN:
+            case ServerParseCheck.BEGIN:
                 source.begin();
                 break;
-            case ServerParse.SAVEPOINT:
+            case ServerParseCheck.SAVEPOINT:
                 SavepointHandler.handle(sql, source);
                 break;
-            case ServerParse.KILL:
+            case ServerParseCheck.KILL:
                 KillHandler.handle(sql, rs >>> 8, source);
                 break;
-            case ServerParse.KILL_QUERY:
+            case ServerParseCheck.KILL_QUERY:
                 source.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, "Unsupported command");
                 break;
-            case ServerParse.EXPLAIN:
+            case ServerParseCheck.EXPLAIN:
                 source.writeErrMessage(ErrorCode.ER_UNKNOWN_COM_ERROR, "Unsupported command");
                 break;
-            case ServerParse.CREATE_DATABASE:
+            case ServerParseCheck.CREATE_DATABASE:
                 // source.createShema(sql);
                 break;
-            case ServerParse.COMMIT:
+            case ServerParseCheck.COMMIT:
                 source.commit();
                 break;
-            case ServerParse.ROLLBACK:
+            case ServerParseCheck.ROLLBACK:
                 source.rollBack();
                 break;
-            case ServerParse.USE:
+            case ServerParseCheck.USE:
                 UseHandler.handle(sql, source, rs >>> 8);
                 break;
             default:
